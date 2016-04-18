@@ -12,9 +12,10 @@ defined ( 'BASEPATH' ) or exit ( 'No direct script access allowed' );
 	<body>
 	
 		<div data-ng-controller="documentJSController">
-		<form action="idToTitle" method="POST">
+<!--		<form action="idToTitle" method="POST">-->
+			<form >
 			<textarea name="text" data-ng-model="input" data-ng-change="dataChanged()" placeholder= "NCBI id to get title"></textarea>
-			<input type="submit" value="submit id" >
+			<button data-ng-click="getPaper(input)">submit id</button>
 		</form>
             <ul>
                 <li data-ng-repeat= "doc in document.payload |filter:input |limitTo:4 " ng-if="input.length > 0">

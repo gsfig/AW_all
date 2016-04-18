@@ -47,8 +47,14 @@ class Document_controller extends REST_Controller
             $result = $this->Document_model->get_document($id);
             
         }
+        if($result){
+            $this->send_reply($result, "", "no document found");
+        }
+        else{ // if document is not on database
+            // TODO: maybe do this in NCBIController?
+        }
         
-        $this->send_reply($result, "", "no document found");
+
     }
 
     public function document_annotation_get()

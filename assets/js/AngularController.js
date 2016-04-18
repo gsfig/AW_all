@@ -10,7 +10,6 @@ aw_module.controller('documentJSController', ['$scope', '$http', function($scope
     $http.get(window.location + 'document').success(function(data){
         $scope.document = data;
     });
-    $scope.abstract = null;
 
     // function
     // shows abstract and title
@@ -26,6 +25,47 @@ aw_module.controller('documentJSController', ['$scope', '$http', function($scope
             $scope.title = null;
             $scope.abstract = null;
         }
+    };
+    $scope.getPaper = function(id){
+        // window.alert($scope.document.payload[0].title);
+        // if $scope.document has id, just return
+        var foundID = false;
+        for (var i = 0, len = $scope.document.payload.length; i < len; i++) {
+            if ($scope.document.payload[i].idNCBI === id) {
+                $scope.title = $scope.document.payload[i].title;
+                $scope.abstract = $scope.document.payload[i].abstract;
+                foundID = true;
+                break;
+            }
+        }
+        if(!foundID){
+
+            // WEBSERVICE to /document/:id
+            // document_requested is available in $scope ( in the tags that have 'data-ng-controller="documentJSController')
+            $http.get(window.location + 'document/'+id).success(function(data){
+                $scope.document_requested = data;
+            });
+            $scope.title = $scope.document_requested.payload[i].title;
+            $scope.abstract = $scope.document_requested.payload[i].abstract;
+            window.alert($scope.title);
+            // TODO: for this to work, still have to deal with what backend does when id isn't in Database
+
+        }
+
+
+/*        angular.forEach($scope.document.payload, function(doc) {
+            // window.alert(doc);
+
+
+        });*/
+
+
+        // if it doesn't request document
+
+
+
+
+
     };
 
 
