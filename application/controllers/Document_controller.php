@@ -38,6 +38,7 @@ class Document_controller extends REST_Controller
         // 17284678, 11748933
         $id = $this->get('id');
         $this->load->model('Document_model');
+        $this->load->model('API_model');
         
         // if no id, get all papers, else get one paper
         if ($id === NULL) {
@@ -51,7 +52,46 @@ class Document_controller extends REST_Controller
             $this->send_reply($result, "", "no document found");
         }
         else{ // if document is not on database
-            // TODO: maybe do this in NCBIController?
+            /*$this->load->model('API_model');
+            $paper = $this->API_model->ncbi_esummary_papers($id);
+            $decoded = json_decode($paper);
+            $idNCBI = $decoded->result->$id->uid;
+            $title = $decoded->result->$id->title;*/
+
+
+            $papers = $this->API_model->ncbi_efetch_papers($id);
+
+            // convert in simple xml object
+            $xml = simplexml_load_string($papers);
+            $pmid = (string) $xml->PubmedArticle->MedlineCitation->PMID;
+            $abstract = (string) $xml->PubmedArticle->MedlineCitation->Article->Abstract->AbstractText;
+            $title = (string) $xml->PubmedArticle->MedlineCitation->Article->ArticleTitle;
+
+
+            /*echo "<br>"."ID"."<br>";
+            echo $id2;
+
+            echo "<br>"."ABSTRACT"."<br>";
+//            var_dump($abstract);
+            echo $abstract;
+
+            echo "<br>"."XML"."<br>";
+//            var_dump($xml);
+            print_r($xml);
+
+            echo "<br>"."TITLE"."<br>";
+            print_r($decoded->result->$id->title);
+            print_r($title2);
+
+            echo "<br>"."VAR DUMP"."<br>";
+            var_dump($paper);*/
+
+            $addedToDB = $this->Document_model->post_document($pmid,$title,$abstract);
+            if($addedToDB){
+                $result = $this->Document_model->get_document($id);
+            }
+            $this->send_reply($result, "", "no document found");
+
         }
         
 

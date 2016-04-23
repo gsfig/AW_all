@@ -21,6 +21,10 @@ class Inicio extends CI_Controller {
 		$this->load->view('idToAbstract_view');
 		$this->load->view('queriesToId_view');
 		$this->load->view('idToTitle_view');
+		//$this->load->view('idToTile_CI'); // TEST PURPOSES, REMOVE
+		//$this->load->view('idToTitle_JS'); // TEST PURPOSES, REMOVE
+
+
 //		$this->load->view('idToTitle3');
 //		$this->load->view('idToTitle2');
 		$this->load->view('idToLink_view');

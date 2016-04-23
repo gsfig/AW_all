@@ -36,6 +36,7 @@ class API_model extends CI_Model {
 		// example
 // 		http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=11748933,11700088&retmode=xml
 // 		base, method, DB, ids, retmode
+		// EFETCH doesn't allow JSON
 		$payload = 'id='.$paper_ids;
 		$url = API_model::NCBI_BASE . API_model::NCBI_METHOD_EFETCH . API_model::NCBI_DB_PUBMED . $payload . API_model::NCBI_RETMODE_XML;
 		$curl = curl_init();
@@ -45,8 +46,8 @@ class API_model extends CI_Model {
 		// Send request.
 		$result = curl_exec($curl);
 		curl_close($curl);
-		
-		
+
+//		echo "<br>"."EFETCH"."<br>".$result . "<br>";
  		return $result;
 			
 	}

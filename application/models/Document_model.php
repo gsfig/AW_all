@@ -10,7 +10,7 @@ class Document_model extends CI_Model
 
     public function get_all_documents()
     {
-        include_once ('DBconfig.php');
+        include ('DBconfig.php');
         
         // SELECT * FROM papers
         $sql = 'SELECT * FROM papers';
@@ -22,7 +22,7 @@ class Document_model extends CI_Model
     public function get_document($id)
     {
         // 17284678, 11748933
-        include_once ('DBconfig.php');
+        include ('DBconfig.php');
         $stmt = $db->prepare('SELECT * FROM papers WHERE idNCBI = :id');
         $stmt->execute(['id' => $id]);
         if ($stmt) {
@@ -35,7 +35,7 @@ class Document_model extends CI_Model
 
     public function get_annotation($id)
     {
-        include_once ('DBconfig.php');
+        include ('DBconfig.php');
         $stmt = $db->prepare('SELECT * FROM annotated_paper WHERE idNCBI = :id');
         $stmt->execute(['id' => $id]);
         if ($stmt) {
@@ -49,7 +49,7 @@ class Document_model extends CI_Model
 //         INSERT INTO papers (idNCBI, title, abstract)
 //         VALUES(123,'titulo','muito abstracto');
 
-        include_once ('DBconfig.php');
+        include ('DBconfig.php');
         $stmt = $db->prepare('INSERT INTO papers (idNCBI, title, abstract) VALUES(:idNCBI, :title, :abstract)');
         $stmt -> bindParam(':idNCBI', $idNCBI);
         $stmt -> bindParam(':title', $title);

@@ -1,15 +1,17 @@
 var aw_module = angular.module('aw.controllers', ['ngSanitize']);
 
 // new controller
-aw_module.controller('documentJSController', ['$scope', '$http', function($scope, $http){
+aw_module.controller('DocumentJSController', ['$scope', '$http', function($scope, $http){
 
-    
+
+
     // initial function
     // WEBSERVICE to /document
     // document is available in $scope ( in the tags that have 'data-ng-controller="documentJSController')
     $http.get(window.location + 'document').success(function(data){
         $scope.document = data;
     });
+    // window.alert($scope.document.payload[0].title);
 
     // function
     // shows abstract and title
@@ -30,6 +32,7 @@ aw_module.controller('documentJSController', ['$scope', '$http', function($scope
         // window.alert($scope.document.payload[0].title);
         // if $scope.document has id, just return
         var foundID = false;
+        // window.alert($scope.document.payload[0].title);
         for (var i = 0, len = $scope.document.payload.length; i < len; i++) {
             if ($scope.document.payload[i].idNCBI === id) {
                 $scope.title = $scope.document.payload[i].title;
@@ -38,37 +41,24 @@ aw_module.controller('documentJSController', ['$scope', '$http', function($scope
                 break;
             }
         }
+        // window.alert($scope.document.payload[0].title);
         if(!foundID){
 
             // WEBSERVICE to /document/:id
             // document_requested is available in $scope ( in the tags that have 'data-ng-controller="documentJSController')
-            $http.get(window.location + 'document/'+id).success(function(data){
-                $scope.document_requested = data;
+            $http({
+                url: window.location + 'document/',
+                method: "GET",
+                params: {id: id}
+            }).then(function successCallback(response) {
+                $scope.document_requested = response.data;
+                $scope.showAbstract($scope.document_requested.payload.title, $scope.document_requested.payload.abstract );
+            }, function errorCallback(response) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
             });
-            $scope.title = $scope.document_requested.payload[i].title;
-            $scope.abstract = $scope.document_requested.payload[i].abstract;
-            window.alert($scope.title);
-            // TODO: for this to work, still have to deal with what backend does when id isn't in Database
-
         }
-
-
-/*        angular.forEach($scope.document.payload, function(doc) {
-            // window.alert(doc);
-
-
-        });*/
-
-
-        // if it doesn't request document
-
-
-
-
-
     };
-
-
 
 
 

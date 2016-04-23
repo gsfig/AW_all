@@ -33,7 +33,7 @@ class NcbiController extends CI_Controller {
 	public function idToTitle()
 	{
 	    // loads API model to use below
-	    $this->load->model('API_model');
+		$this->load->model('API_model');
 	    // send API model text from textbox($p_ids)
 	    //return list of papers' titles
 	    $temp = $this->API_model->ncbi_esummary_papers($this->pull_data());
