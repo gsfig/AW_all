@@ -67,6 +67,7 @@ class Document_controller extends REST_Controller
             $abstract = (string) $xml->PubmedArticle->MedlineCitation->Article->Abstract->AbstractText;
             $title = (string) $xml->PubmedArticle->MedlineCitation->Article->ArticleTitle;
 
+            // TODO: get mesh
 
             /*echo "<br>"."ID"."<br>";
             echo $id2;
@@ -86,6 +87,7 @@ class Document_controller extends REST_Controller
             echo "<br>"."VAR DUMP"."<br>";
             var_dump($paper);*/
 
+            // TODO: send mesh
             $addedToDB = $this->Document_model->post_document($pmid,$title,$abstract);
             if($addedToDB){
                 $result = $this->Document_model->get_document($id);

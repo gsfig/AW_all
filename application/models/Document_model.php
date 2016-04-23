@@ -13,7 +13,7 @@ class Document_model extends CI_Model
         include ('DBconfig.php');
         
         // SELECT * FROM papers
-        $sql = 'SELECT * FROM papers';
+        $sql = 'SELECT * FROM Papers';
         $stmt = $db->query($sql);
         $response = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $response;
@@ -23,7 +23,7 @@ class Document_model extends CI_Model
     {
         // 17284678, 11748933
         include ('DBconfig.php');
-        $stmt = $db->prepare('SELECT * FROM papers WHERE idNCBI = :id');
+        $stmt = $db->prepare('SELECT * FROM Papers WHERE idNCBI = :id');
         $stmt->execute(['id' => $id]);
         if ($stmt) {
             $response = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -36,7 +36,7 @@ class Document_model extends CI_Model
     public function get_annotation($id)
     {
         include ('DBconfig.php');
-        $stmt = $db->prepare('SELECT * FROM annotated_paper WHERE idNCBI = :id');
+        $stmt = $db->prepare('SELECT PA.offset, PA.size, PA.P.idPaper,  FROM Paper P, PaperAnnotation PA WHERE P.idNCBI = :id');
         $stmt->execute(['id' => $id]);
         if ($stmt) {
             $response = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -45,16 +45,21 @@ class Document_model extends CI_Model
         }
         return $response;
     }
-    public function post_document($idNCBI,$title,$abstract){
+    public function post_document($idNCBI,$title,$abstract, $link){
 //         INSERT INTO papers (idNCBI, title, abstract)
 //         VALUES(123,'titulo','muito abstracto');
 
         include ('DBconfig.php');
-        $stmt = $db->prepare('INSERT INTO papers (idNCBI, title, abstract) VALUES(:idNCBI, :title, :abstract)');
+        $stmt = $db->prepare('INSERT INTO Paper (idNCBI, Title, Abstract, linkNCBI) VALUES(:idNCBI, :title, :abstract, :link)');
         $stmt -> bindParam(':idNCBI', $idNCBI);
         $stmt -> bindParam(':title', $title);
         $stmt -> bindParam(':abstract', $abstract);
+        $stmt -> bindParam(':abstract', $link);
         $response = $stmt->execute(); // true if inserted
+        
+        /*if($response){
+            // TODO: add mesh to DB
+        }*/
        
         return $response;
     }

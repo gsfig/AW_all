@@ -35,6 +35,7 @@ class Ibent_annotate extends CI_Controller {
 	
 	public function idToAbstract()
 	{
+//		27100513
 		// loads API model to use below
 		$this->load->model('API_model');
 		// remove white space
@@ -67,10 +68,11 @@ class Ibent_annotate extends CI_Controller {
 			
 			// ANOTATE
 			$abstract = (string) $xml->PubmedArticle->MedlineCitation->Article->Abstract->AbstractText;
-			$anottation_decoded = json_decode($this->annotate($abstract),TRUE);
+			$anottation = $this->annotate($abstract);
+			$anottation_decoded = json_decode($anottation,TRUE);
 // 			$anottation = $this->annotate($abstract);
 			echo "IBEnt";
-			echo '<ul>';
+			echo '<br>';
 // 			echo '<pre>'; print_r($anottation);
 			echo '<pre>'; print_r($anottation_decoded);
 			// SAVE DB
@@ -78,7 +80,8 @@ class Ibent_annotate extends CI_Controller {
 // 			$this->load->model('DB_model');
 // 			$this->DB_model->insert_paper($pmid,$title,$abstract);
 // 			$this->DB_model->insert_annotated_paper($pmid,$anottation);
-			
+			echo"<br>" . "JSON" . "<br>";
+			print_r($anottation);
 			
 		
 	}
