@@ -2,12 +2,11 @@ var aw_module = angular.module('aw.controllers', ['ngSanitize']);
 
 // new controller
 aw_module.controller('DocumentJSController', ['$scope', '$http', function($scope, $http){
-
-
-
     // initial function
     // WEBSERVICE to /document
     // document is available in $scope ( in the tags that have 'data-ng-controller="documentJSController')
+
+    // TODO: Alterar esta forma de chamar webservice, ver como está na funcao getPaper
     $http.get(window.location + 'document').success(function(data){
         $scope.document = data;
     });

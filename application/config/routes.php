@@ -61,7 +61,7 @@ $route['ibent_annotate'] = 'ibent_annotate/free_text';
 // $route['papers'] = 'ibent_annotate/papers';
 $route['queriesToId'] = 'ncbiController/queriesToId';
 $route['idToAbstract'] = 'ibent_annotate/idToAbstract';
-$route['idToTitle'] = 'ncbiController/IdToTitle';
+//$route['idToTitle'] = 'ncbiController/IdToTitle';
 $route['idToLink'] = 'ncbiController/idTolink';
 
 $route['compounds_main'] = 'Chebi_compound/compounds_main';
