@@ -1,0 +1,15 @@
+<div>
+    <form >
+        <textarea name="text" data-ng-model="input" data-ng-change="dataChanged()" placeholder= "NCBI id to get title"></textarea>
+        <button data-ng-click="getPaper(input)">submit id</button>
+    </form>
+    <ul>
+        <li data-ng-repeat= "doc in document.payload |filter:input |limitTo:4 " ng-if="input.length > 0">
+            <a data-ng-click="showAbstract(doc.Title, doc.Abstract)" >{{doc.idNCBI }}</a>
+        </li>
+    </ul>
+    </br>
+    <h4 data-ng-bind = "title"></h4>
+    <p data-ng-bind="abstract"></p>
+
+</div>

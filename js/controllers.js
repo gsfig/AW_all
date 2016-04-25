@@ -1,23 +1,21 @@
-
-
 'use strict';
 
-/*var app = angular.module('awApp',
-    ['ngSanitize'
-
-
-    ]);*/
 // new controller
-var docControllers = angular.module('docControllers', []);
-docControllers.controller('DocumentJSController', ['$scope', '$http', function($scope, $http){
+app.controller('DocumentJSController', ['apiBaseUrl', '$scope', '$http', function(apiBaseUrl, $scope, $http, AuthenticationService){
     // initial function
     // WEBSERVICE to /document
     // document is available in $scope ( in the tags that have 'data-ng-controller="documentJSController')
 
-    // TODO: Alterar esta forma de chamar webservice, ver como está na funcao getPaper
-    $http.get(window.location + 'document').success(function(data){
-        $scope.document = data;
+    $http({
+        url: apiBaseUrl + '/document/',
+        method: "GET",
+    }).then(function successCallback(response) {
+        $scope.document = response.data;
+    }, function errorCallback(response) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
     });
+
     // window.alert($scope.document.payload[0].title);
 
     // function
@@ -25,6 +23,7 @@ docControllers.controller('DocumentJSController', ['$scope', '$http', function($
     $scope.showAbstract = function(title, abstract) {
         $scope.title = title;
         $scope.abstract = abstract;
+
     };
 
     // function
@@ -42,8 +41,8 @@ docControllers.controller('DocumentJSController', ['$scope', '$http', function($
         // window.alert($scope.document.payload[0].title);
         for (var i = 0, len = $scope.document.payload.length; i < len; i++) {
             if ($scope.document.payload[i].idNCBI === id) {
-                $scope.title = $scope.document.payload[i].title;
-                $scope.abstract = $scope.document.payload[i].abstract;
+                $scope.title = $scope.document.payload[i].Title;
+                $scope.abstract = $scope.document.payload[i].Abstract;
                 foundID = true;
                 break;
             }
@@ -54,12 +53,12 @@ docControllers.controller('DocumentJSController', ['$scope', '$http', function($
             // WEBSERVICE to /document/:id
             // document_requested is available in $scope ( in the tags that have 'data-ng-controller="documentJSController')
             $http({
-                url: window.location + 'document/',
+                url: apiBaseUrl + '/document/',
                 method: "GET",
                 params: {id: id}
             }).then(function successCallback(response) {
                 $scope.document_requested = response.data;
-                $scope.showAbstract($scope.document_requested.payload.title, $scope.document_requested.payload.abstract );
+                $scope.showAbstract($scope.document_requested.payload.Title, $scope.document_requested.payload.Abstract );
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
@@ -70,5 +69,8 @@ docControllers.controller('DocumentJSController', ['$scope', '$http', function($
 
 
 }]); //end documentJSController
+
+
+
 
 
