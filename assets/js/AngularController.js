@@ -1,7 +1,15 @@
-var aw_module = angular.module('aw.controllers', ['ngSanitize']);
 
+
+'use strict';
+
+/*var app = angular.module('awApp',
+    ['ngSanitize'
+
+
+    ]);*/
 // new controller
-aw_module.controller('DocumentJSController', ['$scope', '$http', function($scope, $http){
+var docControllers = angular.module('docControllers', []);
+docControllers.controller('DocumentJSController', ['$scope', '$http', function($scope, $http){
     // initial function
     // WEBSERVICE to /document
     // document is available in $scope ( in the tags that have 'data-ng-controller="documentJSController')

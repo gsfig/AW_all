@@ -3,7 +3,7 @@
 $dbhost = 'localhost';
 $dbuser = 'root';
 $dbpass = '';
-$dbname = 'awdb1';
+$dbname = 'awdb2';
 $charset= 'utf8';
 
 $dsn = "mysql:host=$dbhost;dbname=$dbname;charset=$charset";

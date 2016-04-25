@@ -12,8 +12,8 @@ class Document_model extends CI_Model
     {
         include ('DBconfig.php');
         
-        // SELECT * FROM papers
-        $sql = 'SELECT * FROM Papers';
+        // SELECT * FROM paper
+        $sql = 'SELECT * FROM paper';
         $stmt = $db->query($sql);
         $response = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $response;
@@ -23,7 +23,7 @@ class Document_model extends CI_Model
     {
         // 17284678, 11748933
         include ('DBconfig.php');
-        $stmt = $db->prepare('SELECT * FROM Papers WHERE idNCBI = :id');
+        $stmt = $db->prepare('SELECT * FROM paper WHERE idNCBI = :id');
         $stmt->execute(['id' => $id]);
         if ($stmt) {
             $response = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -45,16 +45,15 @@ class Document_model extends CI_Model
         }
         return $response;
     }
-    public function post_document($idNCBI,$title,$abstract, $link){
+    public function post_document($idNCBI,$title,$abstract){
 //         INSERT INTO papers (idNCBI, title, abstract)
 //         VALUES(123,'titulo','muito abstracto');
 
         include ('DBconfig.php');
-        $stmt = $db->prepare('INSERT INTO Paper (idNCBI, Title, Abstract, linkNCBI) VALUES(:idNCBI, :title, :abstract, :link)');
+        $stmt = $db->prepare('INSERT INTO paper (idNCBI, Title, Abstract) VALUES(:idNCBI, :title, :abstract)');
         $stmt -> bindParam(':idNCBI', $idNCBI);
         $stmt -> bindParam(':title', $title);
         $stmt -> bindParam(':abstract', $abstract);
-        $stmt -> bindParam(':abstract', $link);
         $response = $stmt->execute(); // true if inserted
         
         /*if($response){
