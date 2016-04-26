@@ -2,53 +2,35 @@
 app.service('AuthenticationService', function(){
 
     var self = this;
-    var data = undefined;
-    var username = undefined;
     self.add = function (tokenIn, userName){
-        data = tokenIn;
-        username = userName;
+        localStorage.setItem("token", tokenIn);
+        localStorage.setItem("username", userName);
         // window.alert(tokenIn);
+        console.log( "authServ add user " + localStorage.getItem("username"));
+        console.log( "authServ add token " + localStorage.getItem("token"));
     }
     self.user = function () {
-        if (username != undefined) {
-            return username;
-        }
+        // console.log( "authServ return user " + localStorage.getItem("username"));
+        return localStorage.getItem("username");
+
     }
     self.delete =function (){
-        data = undefined;
-        username = undefined;
+
+        localStorage.removeItem("token");
+        localStorage.removeItem("username");
+        // console.log( "authServ remove " + localStorage.getItem("username"));
 
     }
     self.check = function (){
-        if(data != undefined){
-            // window.alert('defined');
+        if(localStorage.getItem("token") === null){
+            // console.log( "authServ check is Undefined " + localStorage.getItem("username"));
+            return false;
+        }
+        else{
+            // console.log( "authServ check is defined " + localStorage.getItem("username"));
             return true;
         }
-
     }
-
-
-
-
-
-
-
-
- /*   var self = this;
-    self.checkToken = function(token){
-        var data = {token: token};
-        $http.post("endpoints/checkToken.php", data).success(function(response){
-            if (response === "unauthorized"){
-                console.log("Logged out");
-                $state.go("login")
-            } else {
-                console.log("Logged In");
-                return response;
-            }
-        }).error(function(error){
-            $state.go("login")
-        })
-
-    }*/
+    
 
 });

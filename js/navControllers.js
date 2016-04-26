@@ -3,13 +3,23 @@
 // new controller
 app.controller('NavBarController', ['$scope', 'AuthenticationService', function($scope, AuthenticationService){
 
-    if (AuthenticationService.check()){
-        $scope.isUserLoggedIn = true;
-        $scope.username = AuthenticationService.user();
-    }
-    else{
-        $scope.isUserLoggedIn = false;
-    }
+    $scope.useractive = function() {
+        if (AuthenticationService.check()){
+            $scope.isUserLoggedIn = true;
+            $scope.username = AuthenticationService.user();
+            return true;
+        }
+        else{
+            $scope.isUserLoggedIn = false;
+            return false;
+        }
+    };
+    $scope.logout = function() {
+        AuthenticationService.delete();
+    };
+
+
+
 
 
 

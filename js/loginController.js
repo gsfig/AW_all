@@ -15,14 +15,6 @@ app.controller('LoginController',['$scope','$http','apiBaseUrl','AuthenticationS
         username: undefined,
         password: undefined
     }
-    /*result.test = {
-        test: "test",
-        test2: "test2",
-        test3: "testers"
-    }
-
-    result.test = JSON.stringify(result.test);*/
-
     $scope.signUserUp = function (){
         window.alert(apiBaseUrl);
         $http({
@@ -40,8 +32,6 @@ app.controller('LoginController',['$scope','$http','apiBaseUrl','AuthenticationS
             // called asynchronously if an error occurs
             // or server returns response with an error status.
         });
-
-
     };
 
     $scope.loginUser = function () {
@@ -57,8 +47,9 @@ app.controller('LoginController',['$scope','$http','apiBaseUrl','AuthenticationS
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
         }).then(function successCallback(response) {
             // console.log(response);
-            // localStorage.setItem("token", JSON.stringify(response));
-            AuthenticationService.add( JSON.stringify(response),$scope.loginInfo.username );
+            // TODO: response vem em json do servidor com mais info do que necessario, verificar se response.data enviado ao servidor para autenticacao é o que servidor esta a espera na BD, coluna "Token"
+
+            AuthenticationService.add( JSON.stringify(response.data),$scope.loginInfo.username );
         }, function errorCallback(response) {
             // called asynchronously if an error occurs
             // or server returns response with an error status.

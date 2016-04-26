@@ -12,9 +12,9 @@
                 <li><a href="#">Page 3</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <a href="" ng-show="isUserLoggedIn">{{username}}</a>
-                <a ui-sref="login" ng-show="!isUserLoggedIn">Login / Sign Up</a>
-                <a href="" ng-show="isUserLoggedIn">Logout</a>
+                <a href="" ng-show= useractive()>{{username}}</a>
+                <a ui-sref="login" ng-show= !useractive()>Login / Sign Up</a>
+                <a href="" ng-show=useractive() ng-click = logout()>Logout</a>
             </ul>
         </div>
     </nav>
