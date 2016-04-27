@@ -1,7 +1,7 @@
 'use strict';
 
 // new controller
-app.controller('LoginController',['$scope','$http','apiBaseUrl','AuthenticationService', function($scope, $http, apiBaseUrl, AuthenticationService){
+app.controller('LoginController',['$scope','$http','$uibModalInstance', 'apiBaseUrl','AuthenticationService', function($scope, $http, $uibModalInstance, apiBaseUrl, AuthenticationService){
 
     //Variables
 
@@ -15,8 +15,9 @@ app.controller('LoginController',['$scope','$http','apiBaseUrl','AuthenticationS
         username: undefined,
         password: undefined
     }
+
+
     $scope.signUserUp = function (){
-        window.alert(apiBaseUrl);
         $http({
             method: "post",
             url: apiBaseUrl + "/signup",
@@ -27,7 +28,7 @@ app.controller('LoginController',['$scope','$http','apiBaseUrl','AuthenticationS
             },
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
         }).then(function successCallback(response) {
-           // do stuff
+            AuthenticationService.add( JSON.stringify(response.data),$scope.signUpInfo.username );
         }, function errorCallback(response) {
             // called asynchronously if an error occurs
             // or server returns response with an error status.
@@ -50,6 +51,8 @@ app.controller('LoginController',['$scope','$http','apiBaseUrl','AuthenticationS
             // TODO: response vem em json do servidor com mais info do que necessario, verificar se response.data enviado ao servidor para autenticacao é o que servidor esta a espera na BD, coluna "Token"
 
             AuthenticationService.add( JSON.stringify(response.data),$scope.loginInfo.username );
+            $uibModalInstance.close();
+            // $uibModalInstance.close();
         }, function errorCallback(response) {
             // called asynchronously if an error occurs
             // or server returns response with an error status.

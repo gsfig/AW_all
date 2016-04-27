@@ -10,37 +10,46 @@ class Login_model extends CI_Model
 
 
     public function post_signUp($username,$email,$password ){
-        include ('DBconfig.php');
+//        include ('DBconfig.php');
         $token = 'undefined';
- /*       $username = 'a';
-        $email = 'email';
-        $password = 'password';*/
-
-        $stmt = $db->prepare('INSERT INTO users (Email, Username, Password, Token) VALUES(:email, :username, :password, :token)');
+        $data = array(
+            'Email' => $email,
+            'Username' => $username,
+            'Password' => $password,
+            'Token' => $token
+        );
+        $this->db->insert('Users', $data);
+        if($this->db->affected_rows() > 0)
+        {
+            return true;
+        }
+        else{
+            return false;
+        }
+        /*
+        $stmt = $db->prepare('INSERT INTO Users (Email, Username, Password, Token) VALUES(:email, :username, :password, :token)');
         $stmt -> bindParam(':email', $email);
         $stmt -> bindParam(':username', $username);
         $stmt -> bindParam(':password', $password);
         $stmt -> bindParam(':token', $token);
-        $response = $stmt->execute(); // true if inserted
+        $response = $stmt->execute(); // true if inserted */
 
 
-
-        /*if($response){
-            // TODO: add mesh to DB
-        }*/
-
-        return $response;
     }
 
     public function getUser($username,$password ){
+
+        // TODO: fazer com query builder
         include ('DBconfig.php');
-        $userInfo = $db->query("SELECT Username FROM users WHERE Username='$username' AND Password='$password'");
+        $userInfo = $db->query("SELECT Username FROM Users WHERE Username='$username' AND Password='$password'");
         return $userInfo->fetchAll();
     }
 
     public function UpdateToken($username,$password, $token ){
+        // TODO: fazer com query builder
+
         include ('DBconfig.php');
-        $stmt = $db->prepare('UPDATE users SET Token=:token WHERE Username=:username AND Password=:password');
+        $stmt = $db->prepare('UPDATE Users SET Token=:token WHERE Username=:username AND Password=:password');
         $stmt -> bindParam(':username', $username);
         $stmt -> bindParam(':password', $password);
         $stmt -> bindParam(':token', $token);

@@ -61,42 +61,44 @@ class Document_controller extends REST_Controller
 
             $papers = $this->API_model->ncbi_efetch_papers($id);
 
-            // convert in simple xml object
-            $xml = simplexml_load_string($papers);
-            $pmid = (string) $xml->PubmedArticle->MedlineCitation->PMID;
-            $abstract = (string) $xml->PubmedArticle->MedlineCitation->Article->Abstract->AbstractText;
-            $title = (string) $xml->PubmedArticle->MedlineCitation->Article->ArticleTitle;
-
-            // TODO: get mesh
-
-            /*echo "<br>"."ID"."<br>";
-            echo $id2;
-
-            echo "<br>"."ABSTRACT"."<br>";
-//            var_dump($abstract);
-            echo $abstract;
-
-            echo "<br>"."XML"."<br>";
-//            var_dump($xml);
-            print_r($xml);
-
-            echo "<br>"."TITLE"."<br>";
-            print_r($decoded->result->$id->title);
-            print_r($title2);
-
-            echo "<br>"."VAR DUMP"."<br>";
-            var_dump($paper);*/
-
-            // TODO: send mesh
-            $addedToDB = $this->Document_model->post_document($pmid,$title,$abstract);
-            if($addedToDB){
-                $result = $this->Document_model->get_document($id);
+            if(is_false($papers)){
+                $this->send_reply(null, "", "NCBI connectivity problem");
             }
-            $this->send_reply($result, "", "no document found");
+            else{
+                // convert in simple xml object
+                $xml = simplexml_load_string($papers);
+                $pmid = (string) $xml->PubmedArticle->MedlineCitation->PMID;
+                $abstract = (string) $xml->PubmedArticle->MedlineCitation->Article->Abstract->AbstractText;
+                $title = (string) $xml->PubmedArticle->MedlineCitation->Article->ArticleTitle;
 
+                // TODO: get mesh
+
+                /*echo "<br>"."ID"."<br>";
+                echo $id2;
+
+                echo "<br>"."ABSTRACT"."<br>";
+    //            var_dump($abstract);
+                echo $abstract;
+
+                echo "<br>"."XML"."<br>";
+    //            var_dump($xml);
+                print_r($xml);
+
+                echo "<br>"."TITLE"."<br>";
+                print_r($decoded->result->$id->title);
+                print_r($title2);
+
+                echo "<br>"."VAR DUMP"."<br>";
+                var_dump($paper);*/
+
+                // TODO: send mesh
+                $addedToDB = $this->Document_model->post_document($pmid,$title,$abstract);
+                if($addedToDB){
+                    $result = $this->Document_model->get_document($id);
+                }
+                $this->send_reply($result, "", "no document found");
+            }
         }
-        
-
     }
 
     public function document_annotation_get()
@@ -104,6 +106,16 @@ class Document_controller extends REST_Controller
         $id = $this->get('id');
         $this->load->model('Document_model');
         $result = $this->Document_model->get_annotation($id);
+
+        if(is_null($result)){ // annotation doesn't exist
+            // get abstract: new get in document_model only for abstract
+            // annotate
+
+            // OR
+            // post annotation($id)
+
+
+        }
         
         $this->send_reply($result, "", "no document found");
     }

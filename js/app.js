@@ -3,9 +3,9 @@ var app = angular.module('awApp', [
     // 'ngRoute',
     'ngSanitize',
     'ui.router',
+    'ui.bootstrap'
     // 'AuthenticationService'
-
-    // 'loginController',
+    //  'LoginController'
     // 'navControllers'
     // 'docControllers'
 ]);
@@ -24,24 +24,29 @@ app.config( function($stateProvider, $urlRouterProvider) {
             views: {
                 '' : {templateUrl: 'partials/home.html'},
                 'header@home' : {templateUrl: 'partials/header.html', controller: 'NavBarController'},
-                'title@home' : {templateUrl: 'partials/idToTitle.html', controller: 'DocumentJSController'},
-                'freeText@home' : {templateUrl: "partials/freeText.html"}
+                'title@home' : {templateUrl: 'partials/idToAnnotate.html', controller: 'DocumentJSController'},
+                'freeText@home' : {templateUrl: "partials/freeTextToAnnotate.html"},
+                'relatedPaper@home' : {templateUrl: "partials/NCBIrelatedPapers.html"},
+                'query@home' : {templateUrl: "partials/queryNCBI.html"}
             }
         })
-        .state('others', {
-            url: '/others',
+        .state('compound', {
+            url: '/compound',
             views: {
-                '' : {templateUrl: 'partials/others.html'},
-                'header@others' : {templateUrl: 'partials/header.html', controller: 'NavBarController'}
+                '' : {templateUrl: 'partials/compound.html'},
+                'header@compound' : {templateUrl: 'partials/header.html', controller: 'NavBarController'},
+                'compoundMain@compound' : {templateUrl: "partials/compoundMain.html"},
+                'compoundPathway@compound' : {templateUrl: "partials/compoundPathway.html"},
+                'compoundOntology@compound' : {templateUrl: "partials/compoundOntology.html"}
             }
         })
-        .state('login', {
+/*        .state('login', {
         url: '/login',
         views: {
             '' : {templateUrl: 'partials/login.html', controller: "LoginController"},
             'header@login' : {templateUrl: 'partials/header.html', controller: 'NavBarController'}
         }
-    })
+    })*/
     
     ;
 /*    app.factory('AuthenticationService', function() {

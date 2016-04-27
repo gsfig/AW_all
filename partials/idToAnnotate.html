@@ -1,0 +1,19 @@
+<div>
+    <form >
+        <textarea name="text" data-ng-model="idPaper" data-ng-change="dataChanged()" placeholder= "NCBI id to annotate"></textarea>
+        <button data-ng-click="getPaper(idPaper)">submit id</button>
+    </form>
+    <ul>
+        <li data-ng-repeat= "doc in document.payload |filter:idPaper |limitTo:4 " ng-if="idPaper.length > 0">
+            <a data-ng-click="showAbstract(doc.Title, doc.Abstract, doc.idNCBI)" >{{doc.idNCBI }}</a>
+
+        </li>
+    </ul>
+    </br>
+    <div ng-show="showAbstDiv === true">
+        <h4 data-ng-bind = "title"></h4>
+        <p data-ng-bind="abstract"></p>
+        <button data-ng-click="annotatePaper()">Annotate text</button>
+    </div>
+
+</div>

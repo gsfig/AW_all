@@ -25,6 +25,9 @@ class Login_controller extends REST_Controller{
 
         $result = $this->Login_model->post_signUp($username,$email, $password );
 
+        if(!is_null($result)){
+            $result = $this->updateToken($username,$password);
+        }
         // if result, else error
         echo $result;
     }
@@ -41,15 +44,19 @@ class Login_controller extends REST_Controller{
 
         $token = 'undefined';
         if (count($result) == 1){
-            //This means that the user is logged in. This gives a token
-            $token = $username . " | " . uniqid() . uniqid() . uniqid();
 
-            $update = $this->Login_model->UpdateToken($username,$password, $token );
+            $token = $this->updateToken($username,$password);
 
-            echo json_encode($token);
+            echo $token;
         } else {
             echo "ERROR";
         }
+    }
+    private function updateToken($username,$password){
+        $this->load->model('Login_model');
+        $token = $username . " | " . uniqid() . uniqid() . uniqid();
+        $update = $this->Login_model->UpdateToken($username,$password, $token );
+        return json_encode($token);
     }
 
 

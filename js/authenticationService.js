@@ -3,11 +3,13 @@ app.service('AuthenticationService', function(){
 
     var self = this;
     self.add = function (tokenIn, userName){
+        localStorage.removeItem("token");
+        localStorage.removeItem("username");
         localStorage.setItem("token", tokenIn);
         localStorage.setItem("username", userName);
         // window.alert(tokenIn);
-        console.log( "authServ add user " + localStorage.getItem("username"));
-        console.log( "authServ add token " + localStorage.getItem("token"));
+        // console.log( "authServ add user " + localStorage.getItem("username"));
+        // console.log( "authServ add token " + localStorage.getItem("token"));
     }
     self.user = function () {
         // console.log( "authServ return user " + localStorage.getItem("username"));
