@@ -13,10 +13,10 @@ class Login_model extends CI_Model
 //        include ('DBconfig.php');
         $token = 'undefined';
         $data = array(
-            'Email' => $email,
-            'Username' => $username,
-            'Password' => $password,
-            'Token' => $token
+            'email' => $email,
+            'username' => $username,
+            'password' => $password,
+            'token' => $token
         );
         $this->db->insert('Users', $data);
         if($this->db->affected_rows() > 0)
@@ -41,7 +41,7 @@ class Login_model extends CI_Model
 
         // TODO: fazer com query builder
         include ('DBconfig.php');
-        $userInfo = $db->query("SELECT Username FROM Users WHERE Username='$username' AND Password='$password'");
+        $userInfo = $db->query("SELECT username FROM Users WHERE Username='$username' AND password='$password'");
         return $userInfo->fetchAll();
     }
 
@@ -49,7 +49,7 @@ class Login_model extends CI_Model
         // TODO: fazer com query builder
 
         include ('DBconfig.php');
-        $stmt = $db->prepare('UPDATE Users SET Token=:token WHERE Username=:username AND Password=:password');
+        $stmt = $db->prepare('UPDATE Users SET token=:token WHERE username=:username AND password=:password');
         $stmt -> bindParam(':username', $username);
         $stmt -> bindParam(':password', $password);
         $stmt -> bindParam(':token', $token);

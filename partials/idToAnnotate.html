@@ -5,7 +5,7 @@
     </form>
     <ul>
         <li data-ng-repeat= "doc in document.payload |filter:idPaper |limitTo:4 " ng-if="idPaper.length > 0">
-            <a data-ng-click="showAbstract(doc.Title, doc.Abstract, doc.idNCBI)" >{{doc.idNCBI }}</a>
+            <a data-ng-click="showAbstract(doc.title, doc.abstract, doc.idNCBI)" >{{doc.idNCBI }}</a>
 
         </li>
     </ul>

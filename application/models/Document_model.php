@@ -59,8 +59,8 @@ class Document_model extends CI_Model
 
         $data = array(
                 'idNCBI' => $idNCBI,
-                'Title' => $title,
-                'Abstract' => $abstract
+                'title' => $title,
+                'abstract' => $abstract
         );
         $this->db->insert('Paper', $data);
         if($this->db->affected_rows() > 0)

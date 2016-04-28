@@ -46,7 +46,7 @@ app.controller('DocumentJSController', ['apiBaseUrl', '$scope', '$http', functio
         // window.alert($scope.document.payload[0].title);
         for (var i = 0, len = $scope.document.payload.length; i < len; i++) {
             if ($scope.document.payload[i].idNCBI === id) {
-                $scope.showAbstract($scope.document.payload[i].Title, $scope.document.payload[i].Abstract, $scope.document.payload[i].idNCBI)
+                $scope.showAbstract($scope.document.payload[i].title, $scope.document.payload[i].abstract, $scope.document.payload[i].idNCBI)
                 foundID = true;
                 break;
             }
@@ -62,7 +62,8 @@ app.controller('DocumentJSController', ['apiBaseUrl', '$scope', '$http', functio
                 params: {id: id}
             }).then(function successCallback(response) {
                 $scope.document_requested = response.data;
-                $scope.showAbstract($scope.document_requested.payload[0].Title, $scope.document_requested.payload[0].Abstract,$scope.document_requested.payload[i].idNCBI );
+                $scope.showAbstract($scope.document_requested.payload[0].title, $scope.document_requested.payload[0].abstract,$scope.document_requested.payload[i].idNCBI );
+
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
