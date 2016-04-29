@@ -61,7 +61,7 @@ class Document_controller extends REST_Controller
 
             $papers = $this->API_model->ncbi_efetch_papers($id);
 
-            if(is_false($papers)){
+            if(!$papers){
                 $this->send_reply(null, "", "NCBI connectivity problem");
             }
             else{

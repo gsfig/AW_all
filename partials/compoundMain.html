@@ -1,9 +1,12 @@
 <div>
 
     <form >
-        <textarea name="text" placeholder="Chemical Compound: Main"></textarea>
-        <button data-ng-click="">submit compound</button>
+        <textarea name="text" data-ng-model="chemName"placeholder="Chemical Compound: Main"></textarea>
+        <button data-ng-click="getDbpedia(chemName)">submit compound</button>
     </form>
 
-
+    <!--{{dbpedia}}-->
+        <li data-ng-repeat="(key, val) in dbpedia.bindings[0]">
+            <a>{{key}} : {{val.value}}</a>
+        </li>
 </div>

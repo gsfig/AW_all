@@ -49,18 +49,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples: my-controller/index -> my_controller/index
 |   my-controller/my-method -> my_controller/my_method
 */
+$route['cheminfo'] = 'dbpedia_controller/cheminfo';
+
 
 $route['signup'] = 'login_controller/signup';
 $route['login'] = 'login_controller/login';
+$route['logout'] = 'login_controller/logout';
 
 $route['document'] = 'document_controller/document';
-$route['document/(:num)'] = 'document_controller/document/id/$1';
+//$route['document/(:num)'] = 'document_controller/document/id/$1';
 $route['document/(:num)/annotation'] = 'document_controller/document_annotation/id/$1';
 // $route['document/(:num)/'] = 'document_controller/document_annotation/id/$1';
 // document_post
 // idNCBI, title, abstract
 
-$route['ibent_annotate'] = 'ibent_annotate/free_text';
+$route['ibent_annotate'] = 'ibent_controller/free_text';
 // $route['papers'] = 'ibent_annotate/papers';
 $route['queriesToId'] = 'ncbiController/queriesToId';
 //$route['idToAnnotate'] = 'ibent_controller/paperAnnotate';

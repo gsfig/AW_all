@@ -10,7 +10,6 @@ class Login_model extends CI_Model
 
 
     public function post_signUp($username,$email,$password ){
-//        include ('DBconfig.php');
         $token = 'undefined';
         $data = array(
             'email' => $email,
@@ -26,35 +25,31 @@ class Login_model extends CI_Model
         else{
             return false;
         }
-        /*
-        $stmt = $db->prepare('INSERT INTO Users (Email, Username, Password, Token) VALUES(:email, :username, :password, :token)');
-        $stmt -> bindParam(':email', $email);
-        $stmt -> bindParam(':username', $username);
-        $stmt -> bindParam(':password', $password);
-        $stmt -> bindParam(':token', $token);
-        $response = $stmt->execute(); // true if inserted */
-
-
     }
 
     public function getUser($username,$password ){
-
-        // TODO: fazer com query builder
-        include ('DBconfig.php');
-        $userInfo = $db->query("SELECT username FROM Users WHERE Username='$username' AND password='$password'");
-        return $userInfo->fetchAll();
+        $query = $this->db->get_where('Users', array('username' => $username, 'password' => $password));
+        $result = $query->result();
+        return $result;
     }
 
-    public function UpdateToken($username,$password, $token ){
-        // TODO: fazer com query builder
+    // should receive oldtoken as well so that WHERE is with username and oldtoken
+    public function UpdateToken($username, $token ){
 
-        include ('DBconfig.php');
-        $stmt = $db->prepare('UPDATE Users SET token=:token WHERE username=:username AND password=:password');
-        $stmt -> bindParam(':username', $username);
-        $stmt -> bindParam(':password', $password);
-        $stmt -> bindParam(':token', $token);
-        return  $stmt->execute(); // true if inserted
+        $data = array(
+            'token' => $token
+        );
+        $array = array('username' => $username);
 
+        $this->db->where($array);
+        $this->db->update('Users', $data);
+        if($this->db->affected_rows() > 0)
+        {
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
 

@@ -1,5 +1,5 @@
 
-app.service('AuthenticationService', function(){
+app.service('AuthenticationService', function($http, apiBaseUrl){
 
     var self = this;
     self.add = function (tokenIn, userName){
@@ -16,11 +16,25 @@ app.service('AuthenticationService', function(){
         return localStorage.getItem("username");
 
     }
-    self.delete =function (){
+    self.logout =function (){
 
-        localStorage.removeItem("token");
-        localStorage.removeItem("username");
-        // console.log( "authServ remove " + localStorage.getItem("username"));
+        // Webservice logout
+        $http({
+            method: "post",
+            url: apiBaseUrl + "/logout",
+            data: {
+                username: localStorage.getItem("username"),
+                token: localStorage.getItem("token")
+            },
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }).then(function successCallback(response) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("username");
+        }, function errorCallback(response) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+            console.error(response);
+        });
 
     }
     self.check = function (){
@@ -33,6 +47,4 @@ app.service('AuthenticationService', function(){
             return true;
         }
     }
-    
-
 });

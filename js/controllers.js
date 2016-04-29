@@ -1,12 +1,8 @@
 'use strict';
-
-// new controller
 app.controller('DocumentJSController', ['apiBaseUrl', '$scope', '$http', function(apiBaseUrl, $scope, $http){
-    // initial function
+    var idPaperInView = undefined;
     // WEBSERVICE to /document
     // document is available in $scope ( in the tags that have 'data-ng-controller="documentJSController')
-
-    var idPaperInView = undefined;
     $http({
         url: apiBaseUrl + '/document/',
         method: "GET",
@@ -16,10 +12,6 @@ app.controller('DocumentJSController', ['apiBaseUrl', '$scope', '$http', functio
         // called asynchronously if an error occurs
         // or server returns response with an error status.
     });
-
-    // window.alert($scope.document.payload[0].title);
-
-    // function
     // shows abstract and title
     $scope.showAbstract = function(title, abstract, idNCBI) {
         $scope.title = title;
@@ -27,8 +19,6 @@ app.controller('DocumentJSController', ['apiBaseUrl', '$scope', '$http', functio
         $scope.showAbstDiv = true;
         idPaperInView =idNCBI;
     };
-
-    // function
     // sets abstract and title to null so that it doesn't show in view if text in searchbox changes
     $scope.dataChanged = function() {
         if($scope.title != null){
@@ -36,7 +26,6 @@ app.controller('DocumentJSController', ['apiBaseUrl', '$scope', '$http', functio
             $scope.abstract = null;
             $scope.showAbstDiv = false;
             idPaperInView = undefined;
-
         }
     };
     $scope.getPaper = function(id){
@@ -53,7 +42,6 @@ app.controller('DocumentJSController', ['apiBaseUrl', '$scope', '$http', functio
         }
         // window.alert($scope.document.payload[0].title);
         if(!foundID){
-
             // WEBSERVICE to /document/:id
             // document_requested is available in $scope ( in the tags that have 'data-ng-controller="documentJSController')
             $http({
@@ -78,16 +66,10 @@ app.controller('DocumentJSController', ['apiBaseUrl', '$scope', '$http', functio
         else{
                         
         }
-
-
     }
     $scope.annotateText = function(id){
 
-
     }
-
-
-
 }]); //end documentJSController
 
 

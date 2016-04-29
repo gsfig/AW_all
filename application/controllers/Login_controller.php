@@ -45,18 +45,34 @@ class Login_controller extends REST_Controller{
         $token = 'undefined';
         if (count($result) == 1){
 
-            $token = $this->updateToken($username,$password);
+            $token = $this->updateToken($username);
 
             echo $token;
         } else {
             echo "ERROR";
         }
     }
-    private function updateToken($username,$password){
+    private function updateToken($username){
         $this->load->model('Login_model');
         $token = $username . " | " . uniqid() . uniqid() . uniqid();
-        $update = $this->Login_model->UpdateToken($username,$password, $token );
+        $update = $this->Login_model->UpdateToken($username, $token);
         return json_encode($token);
+    }
+    function logout_post(){
+
+        // grab user and password
+        $data = json_decode(file_get_contents("php://input"));
+        $username = $data->username;
+        $token = $data->token;
+
+        $this->load->model('Login_model');
+        $result = $this->Login_model->updateToken($username, null);
+
+        if (!is_null($result)){
+            echo "logged out";
+        } else {
+            echo "db error log out";
+        }
     }
 
 

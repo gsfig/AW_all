@@ -1,8 +1,6 @@
 'use strict';
 
-// new controller
 app.controller('NavBarController', ['$scope','$uibModal', 'AuthenticationService', function($scope, $uibModal, AuthenticationService){
-
     $scope.open = function () {
         // console.log('opening pop up');
         var modalInstance = $uibModal.open({
@@ -10,8 +8,6 @@ app.controller('NavBarController', ['$scope','$uibModal', 'AuthenticationService
             controller: 'LoginController'
         });
     }
-
-
     $scope.useractive = function() {
         if (AuthenticationService.check()){
             $scope.isUserLoggedIn = true;
@@ -24,22 +20,9 @@ app.controller('NavBarController', ['$scope','$uibModal', 'AuthenticationService
         }
     };
     $scope.logout = function() {
-        AuthenticationService.delete();
+        AuthenticationService.logout();
     };
-
-
-
-
-
-
-
-    // só links ?
-
-
-
-
-
-}]); //end NavBarController
+ }]); //end NavBarController
 
 
 
