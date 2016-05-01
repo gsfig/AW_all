@@ -43,9 +43,22 @@ class Dbpedia_controller extends REST_Controller
 
     function getUrlDbpedia($term)
     {
+        /* Dá todos os que pertencem a Chemical114806838
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX type: <http://dbpedia.org/class/yago/>
+PREFIX prop: <http://dbpedia.org/property/>
+PREFIX res: <http://dbpedia.org/resource/>
+SELECT ?a
+WHERE { ?a a type:Chemical114806838 }
+        */
+
+
+
+
         $format = 'json';
 
-        $query = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>        
+
+        $query = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX type: <http://dbpedia.org/class/yago/>
 PREFIX prop: <http://dbpedia.org/property/>
 PREFIX res: <http://dbpedia.org/resource/>

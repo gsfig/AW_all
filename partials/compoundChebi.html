@@ -1,0 +1,127 @@
+<div>
+
+    <form >
+        <textarea name="id" data-ng-model="chebiID"placeholder="Chebi ID"></textarea>
+        <button data-ng-click="getChebi(chebiID)">submit compound</button>
+    </form>
+
+
+
+
+<!--CHEBI ID-->
+    <div ng-if="testForArray(chebi.ChebiID)">
+        <li ng-repeat=" item in chebi.ChebiID" >
+            Chebi ID: {{item.ChebiID}}<br/>
+        </li  >
+    </div>
+    <div ng-if="!testForArray(chebi.ChebiID)">
+        <li >
+            Chebi ID: {{chebi.ChebiID}}<br/>
+        </li  >
+    </div>
+<!--CHEBI ASCII-->
+    <div ng-if="testForArray(chebi.Chebiascii)">
+        <li ng-repeat=" item in chebi.Chebiascii" >
+            Chebi Ascii: {{item.ChebiID}}<br/>
+        </li  >
+    </div>
+    <div ng-if="!testForArray(chebi.Chebiascii)">
+        <li >
+            Chebi Ascii: {{chebi.Chebiascii}}<br/>
+        </li  >
+    </div>
+<!--FORMULAE-->
+    <div ng-if="testForArray(chebi.Formulae)">
+        <li ng-repeat=" item in chebi.Formulae" >
+            Formulae: {{item.source}}  |   {{item.data}}<br/>
+        </li  >
+    </div>
+    <div ng-if="!testForArray(chebi.Formulae)">
+        <li >
+            Formulae: {{chebi.Formulae.source}}  |   {{chebi.Formulae.data}}<br/>
+        </li  >
+    </div>
+<!--CHEMICAL STRUCTURES-->
+    <div ng-if="testForArray(chebi.ChemicalStructures)">
+
+        <li ng-repeat=" item in chebi.ChemicalStructures" >
+            Chemical Structure {{$index+1}}<br/>
+            Type: {{item.type}} <br/>
+            Dimensions: {{item.dimension}} <br/>
+            Structure: {{item.structure}} <br/>
+        </li  >
+    </div>
+    <div ng-if="!testForArray(chebi.ChemicalStructures)">
+        <li >
+            Chemical Structure <br/>
+            Type: {{chebi.ChemicalStructures.type}} <br/>
+            Dimensions: {{chebi.ChemicalStructures.dimension}} <br/>
+            Structure: {{chebi.ChemicalStructures.structure}} <br/>
+        </li  >
+    </div>
+<!--IUPAC NAMES-->
+    <div ng-if="testForArray(chebi.IupacNames)">
+
+        <li ng-repeat=" item in chebi.IupacNames" >
+            {{item.type}} {{$index+1}} | {{item.data}}<br/>
+        </li  >
+    </div>
+    <div ng-if="!testForArray(chebi.IupacNames)">
+        <li >
+            {{chebi.IupacNames.type}} | {{chebi.IupacNames.data}}<br/>
+        </li  >
+    </div>
+<!--INCHI-->
+    <div ng-if="testForArray(chebi.inchi)">
+        <li ng-repeat=" item in chebi.inchi" >
+            {{item.inchi}} <br/>
+        </li  >
+    </div>
+    <div ng-if="!testForArray(chebi.inchi)">
+        <li >
+            {{chebi.inchi}}<br/>
+        </li  >
+    </div>
+<!--INCHI KEY-->
+    <div ng-if="testForArray(chebi.inchiKey)">
+        <li ng-repeat=" item in chebi.inchiKey" >
+            {{item.inchiKey}} <br/>
+        </li  >
+    </div>
+    <div ng-if="!testForArray(chebi.inchiKey)">
+        <li >
+            Inchi Key: {{chebi.inchiKey}}<br/>
+        </li  >
+    </div>
+<!--SYNONYMS-->
+    <div ng-if="testForArray(chebi.Synonyms)">
+        Synonyms:
+        <li ng-repeat=" item in chebi.Synonyms" >
+            {{item.source}} | {{item.data}}<br/>
+        </li  >
+    </div>
+    <div ng-if="!testForArray(chebi.Synonyms)">
+        <li >
+            Synonym: {{chebi.Synonyms.source}} | {{chebi.Synonyms.data}}<br/>
+        </li  >
+    </div>
+<!--Registry numbers-->
+    <div ng-if="testForArray(chebi.RegistryNumbers)">
+        Registry numbers:
+        <li ng-repeat=" item in chebi.RegistryNumbers">
+            Source: {{item.source}} <br>
+            Type: {{item.type}}<br>
+            Number: {{item.data}}<br>
+
+        </li  >
+    </div>
+    <div ng-if="!testForArray(chebi.RegistryNumbers)">
+        <li >
+            Registry numbers:
+            Source: {{chebi.RegistryNumbers.source}} <br>
+            Type: {{chebi.RegistryNumbers.type}}<br>
+            Number: {{chebi.RegistryNumbers.data}}<br>
+        </li  >
+    </div>
+
+</div>

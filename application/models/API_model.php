@@ -18,6 +18,7 @@ class API_model extends CI_Model {
 	const NCBI_METHOD_ELINK = 'elink.fcgi?';
 	
 	const CHEBI_BASE = 'http://www.ebi.ac.uk/webservices/chebi/2.0/test/';
+
 	const CHEBI_METHOD_GETCOMPLETEENTITY = 'getCompleteEntity?';
 	const CHEBI_METHOD_GETONTOLOGYPARENTS = 'getOntologyParents?';
 	const CHEBI_METHOD_GETONTOLOGYCHILDREN = 'getOntologyChildren?';
@@ -132,7 +133,7 @@ class API_model extends CI_Model {
 	    $curl = curl_init();
 	    curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE); //Return the response as a string instead of outputting it to the screen
 	    curl_setopt($curl, CURLOPT_URL, $url);
-	    curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:text/plain'));
+	    curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/xml'));
 	    # Send request.
 	    $result = curl_exec($curl);
 	    curl_close($curl);

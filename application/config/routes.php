@@ -70,7 +70,7 @@ $route['queriesToId'] = 'ncbiController/queriesToId';
 //$route['idToTitle'] = 'ncbiController/IdToTitle';
 //$route['idToLink'] = 'ncbiController/idTolink';
 
-$route['compounds_main'] = 'Chebi_compound/compounds_main';
+$route['compounds'] = 'chebi_controller/compounds';
 $route['compounds_ontology'] = 'Chebi_compound/compounds_ontology';
 $route['compounds_pathway'] = 'Chebi_compound/compounds_pathway';
 
