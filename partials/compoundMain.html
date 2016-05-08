@@ -1,4 +1,4 @@
-<div>
+<div itemscope="itemscope" itemtype="http://www.axeleratio.com/voc/chemid">
 
     <form >
         <textarea name="text" data-ng-model="chemName"placeholder="Chemical Compound: Main"></textarea>
@@ -6,7 +6,15 @@
     </form>
 
     <!--{{dbpedia}}-->
-        <li data-ng-repeat="(key, val) in dbpedia.bindings[0]">
+        <!--<li data-ng-repeat="(key, val) in dbpedia.bindings[0]">
             <a>{{key}} : {{val.value}}</a>
-        </li>
+        </li>-->
+
+
+    <li data-ng-repeat="key in dbpedia.bindings">
+        <span itemprop= "SMILES"> smiles: {{key.smiles.value }}</span><br>
+        <span> Molecular weigth: {{key.molecularWeight.value }}</span><br>
+        <span itemprop= "PubChem"> PubChem: {{key.pubchem.value }}</span><br>
+
+    </li>
 </div>

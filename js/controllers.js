@@ -17,6 +17,7 @@ app.controller('DocumentJSController', ['apiBaseUrl', '$scope', '$http', functio
         $scope.title = title;
         $scope.abstract = abstract;
         $scope.showAbstDiv = true;
+        $scope.idNCBI = idNCBI;
         idPaperInView =idNCBI;
     };
     // sets abstract and title to null so that it doesn't show in view if text in searchbox changes
@@ -60,14 +61,43 @@ app.controller('DocumentJSController', ['apiBaseUrl', '$scope', '$http', functio
         }
     };
     $scope.annotatePaper = function(id){
-        if(isUndefined(idPaperInView)){
+        if(angular.isUndefined(id)){
             console.error("Paper id is undefined")
         }
         else{
+            $http({
+                method: "post",
+                url: apiBaseUrl + "/document/annotation",
+                data: {
+                    idNCBI: id
+                },
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
+            }).then(function successCallback(response) {
+                $scope.ibent_annotation = response.data.payload;
+                console.log($scope.ibent_annotation);
+            }, function errorCallback(response) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+            });
                         
         }
     }
-    $scope.annotateText = function(id){
+    $scope.annotateText = function(text){
+
+        $http({
+            method: "post",
+            url: apiBaseUrl + "/ibent_annotate",
+            data: {
+                text: text
+            },
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then(function successCallback(response) {
+            $scope.ibent_annotation = response.data.payload;
+            console.log($scope.ibent_annotation);
+        }, function errorCallback(response) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+        });
 
     }
 }]); //end documentJSController

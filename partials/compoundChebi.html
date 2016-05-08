@@ -6,39 +6,39 @@
     </form>
 
 
+    <div itemscope="itemscope" itemtype="http://www.axeleratio.com/voc/chemid">
 
-
-<!--CHEBI ID-->
+    <!--CHEBI ID-->
     <div ng-if="testForArray(chebi.ChebiID)">
         <li ng-repeat=" item in chebi.ChebiID" >
-            Chebi ID: {{item.ChebiID}}<br/>
+            <span itemprop="ChEBI" > Chebi ID: {{item.ChebiID}} </span> <br/>
         </li  >
     </div>
     <div ng-if="!testForArray(chebi.ChebiID)">
         <li >
-            Chebi ID: {{chebi.ChebiID}}<br/>
+            <span itemprop="ChEBI"> Chebi ID: {{chebi.ChebiID}} </span> <br/>
         </li  >
     </div>
 <!--CHEBI ASCII-->
-    <div ng-if="testForArray(chebi.Chebiascii)">
+    <div  ng-if="testForArray(chebi.Chebiascii)">
         <li ng-repeat=" item in chebi.Chebiascii" >
-            Chebi Ascii: {{item.ChebiID}}<br/>
+            <span itemprop="CompName" >Chebi Ascii: {{item.ChebiID}}</span> <br/>
         </li  >
     </div>
     <div ng-if="!testForArray(chebi.Chebiascii)">
         <li >
-            Chebi Ascii: {{chebi.Chebiascii}}<br/>
+            <span  itemprop="CompName" >Chebi Ascii: {{chebi.Chebiascii}} </span> <br/>
         </li  >
     </div>
 <!--FORMULAE-->
     <div ng-if="testForArray(chebi.Formulae)">
         <li ng-repeat=" item in chebi.Formulae" >
-            Formulae: {{item.source}}  |   {{item.data}}<br/>
+            <span itemprop="Formula"> Formulae: {{item.source}}  |   {{item.data}} </span> <br/>
         </li  >
     </div>
     <div ng-if="!testForArray(chebi.Formulae)">
         <li >
-            Formulae: {{chebi.Formulae.source}}  |   {{chebi.Formulae.data}}<br/>
+            <span itemprop="Formula"> Formulae: {{chebi.Formulae.source}}  |   {{chebi.Formulae.data}} </span> <br/>
         </li  >
     </div>
 <!--CHEMICAL STRUCTURES-->
@@ -74,35 +74,35 @@
 <!--INCHI-->
     <div ng-if="testForArray(chebi.inchi)">
         <li ng-repeat=" item in chebi.inchi" >
-            {{item.inchi}} <br/>
+            <span itemprop="InChI"> {{item.inchi}} </span> <br/>
         </li  >
     </div>
     <div ng-if="!testForArray(chebi.inchi)">
         <li >
-            {{chebi.inchi}}<br/>
+            <span itemprop="InChI"> {{chebi.inchi}}</span> <br/>
         </li  >
     </div>
 <!--INCHI KEY-->
     <div ng-if="testForArray(chebi.inchiKey)">
         <li ng-repeat=" item in chebi.inchiKey" >
-            {{item.inchiKey}} <br/>
+            <span itemprop="InChI"> {{item.inchiKey}} </span> <br/>
         </li  >
     </div>
     <div ng-if="!testForArray(chebi.inchiKey)">
         <li >
-            Inchi Key: {{chebi.inchiKey}}<br/>
+            <span itemprop="InChI"> Inchi Key: {{chebi.inchiKey}}</span> <br/>
         </li  >
     </div>
 <!--SYNONYMS-->
     <div ng-if="testForArray(chebi.Synonyms)">
         Synonyms:
         <li ng-repeat=" item in chebi.Synonyms" >
-            {{item.source}} | {{item.data}}<br/>
+            <span itemprop="TrivialName"> {{item.source}} | {{item.data}} </span> <br/>
         </li  >
     </div>
     <div ng-if="!testForArray(chebi.Synonyms)">
         <li >
-            Synonym: {{chebi.Synonyms.source}} | {{chebi.Synonyms.data}}<br/>
+            <span itemprop="TrivialName"> Synonym: {{chebi.Synonyms.source}} | {{chebi.Synonyms.data}}</span> <br/>
         </li  >
     </div>
 <!--Registry numbers-->
@@ -123,5 +123,5 @@
             Number: {{chebi.RegistryNumbers.data}}<br>
         </li  >
     </div>
-
+</div>
 </div>

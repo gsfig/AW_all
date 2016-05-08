@@ -58,12 +58,13 @@ $route['logout'] = 'login_controller/logout';
 
 $route['document'] = 'document_controller/document';
 //$route['document/(:num)'] = 'document_controller/document/id/$1';
-$route['document/(:num)/annotation'] = 'document_controller/document_annotation/id/$1';
+$route['document/annotation'] = 'document_controller/paper_annotation';
+$route['ibent_annotate'] = 'document_controller/free_text';
+
 // $route['document/(:num)/'] = 'document_controller/document_annotation/id/$1';
 // document_post
 // idNCBI, title, abstract
 
-$route['ibent_annotate'] = 'ibent_controller/free_text';
 // $route['papers'] = 'ibent_annotate/papers';
 $route['queriesToId'] = 'ncbiController/queriesToId';
 //$route['idToAnnotate'] = 'ibent_controller/paperAnnotate';

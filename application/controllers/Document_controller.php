@@ -52,12 +52,6 @@ class Document_controller extends REST_Controller
             $this->send_reply($result, "", "no document found");
         }
         else{ // if document is not on database
-            /*$this->load->model('API_model');
-            $paper = $this->API_model->ncbi_esummary_papers($id);
-            $decoded = json_decode($paper);
-            $idNCBI = $decoded->result->$id->uid;
-            $title = $decoded->result->$id->title;*/
-
 
             $papers = $this->API_model->ncbi_efetch_papers($id);
 
@@ -73,24 +67,6 @@ class Document_controller extends REST_Controller
 
                 // TODO: get mesh
 
-                /*echo "<br>"."ID"."<br>";
-                echo $id2;
-
-                echo "<br>"."ABSTRACT"."<br>";
-    //            var_dump($abstract);
-                echo $abstract;
-
-                echo "<br>"."XML"."<br>";
-    //            var_dump($xml);
-                print_r($xml);
-
-                echo "<br>"."TITLE"."<br>";
-                print_r($decoded->result->$id->title);
-                print_r($title2);
-
-                echo "<br>"."VAR DUMP"."<br>";
-                var_dump($paper);*/
-
                 // TODO: send mesh
                 $addedToDB = $this->Document_model->post_document($pmid,$title,$abstract);
                 if($addedToDB){
@@ -100,6 +76,7 @@ class Document_controller extends REST_Controller
             }
         }
     }
+
 
     public function document_annotation_get()
     {
@@ -129,28 +106,86 @@ class Document_controller extends REST_Controller
         
         $this->send_reply($result, "document inserted sucessfully", "document not inserted");
         
-//         TO TEST - POSTMAN
-//         put parameters in "body"
 
-// POST /AW_server/document/ HTTP/1.1
-// Host: localhost
-// Accept: application/json
-// Cache-Control: no-cache
-// Postman-Token: a43809f2-0ce2-6590-6115-a734ee3fc9a1
-// Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
-
-// ----WebKitFormBoundary7MA4YWxkTrZu0gW
-// Content-Disposition: form-data; name="idNCBI"
-
-// 1234
-// ----WebKitFormBoundary7MA4YWxkTrZu0gW
-// Content-Disposition: form-data; name="title"
-
-// titulo novo
-// ----WebKitFormBoundary7MA4YWxkTrZu0gW
-// Content-Disposition: form-data; name="abstract"
-
-// abstrato novo
-// ----WebKitFormBoundary7MA4YWxkTrZu0gW    
     }
+    
+    ///////////////   IBENT //////////////
+
+    private function annotate($text_anotate){
+        $this->load->model('Ibent_model');
+        return $this->Ibent_model->annotate($text_anotate);
+    }
+    public function free_text_post()
+    {
+        $data = json_decode(file_get_contents("php://input"));
+        $text_to_anotate = $data->text;
+
+//		$text_to_anotate = $this->pull_data();
+//		$text_to_anotate = "Primary Leydig cells obtained from bank vole testes and the established tumor Leydig cell line (MA-10) have been used to explore the effects of 4-tert-octylphenol (OP). Leydig cells were treated with two concentrations of OP (10(-4)M, 10(-8)M) alone or concomitantly with anti-estrogen ICI 182,780 (1M). In OP-treated bank vole Leydig cells, inhomogeneous staining of estrogen receptor (ER) within cell nuclei was found, whereas it was of various intensity among MA-10 Leydig cells. The expression of ER mRNA and protein decreased in both primary and immortalized Leydig cells independently of OP dose. ICI partially reversed these effects at mRNA level while at protein level abrogation was found only in vole cells. Dissimilar action of OP on cAMP and androgen production was also observed. This study provides further evidence that OP shows estrogenic properties acting on Leydig cells. However, its effect is diverse depending on the cellular origin. ";
+        $result = $this->annotate($text_to_anotate);
+//		$anottation_decoded = json_decode($result,TRUE);
+//		echo '<pre>'; print_r($result);'<pre>';
+        $this->send_reply($result, "ok", "ibent error");
+    }
+    public function paper_annotation_post()
+    {
+        $this->load->model('Document_model');
+
+        // POSTMAN
+//        $this->load->helper('url');
+//        $idNCBI = $_POST["idNCBI"];
+//        $this->send_reply($idNCBI, "ok", "ibent error");
+
+
+        // ANGULAR
+        $data = json_decode(file_get_contents("php://input"));
+        $idNCBI = $data->idNCBI;
+
+
+
+        if(false){ // if annotation exists for this paper
+
+            // compose reply
+
+        }
+        else{ // else get abstract and annotate
+
+            // get abstract
+            $paper = $this->Document_model->get_document($idNCBI);
+
+            $text_anotate = $paper[0]->abstract;
+
+            // Annotate
+            $annotation = json_decode($this->annotate($text_anotate));
+            
+
+            // POSTMAN
+//            $annotation = json_decode(file_get_contents(base_url('annotation.json')));
+//            $this->send_reply($annotation, "ok", "ibent error");
+//            return $annotation;
+
+            $user = null;
+            $addedToDB = $this->Document_model->post_paper_annotation($idNCBI, $annotation, $user);
+            $this->send_reply($addedToDB, "ok", "ibent error");
+
+
+
+            // save annotation DB
+            // compose reply
+        }
+
+
+
+
+
+
+//        $this->send_reply($result, "ok", "ibent error");
+    }
+
+
+
+
+    
+    
+    
 }
