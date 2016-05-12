@@ -30,7 +30,7 @@ app.config( function($stateProvider, $urlRouterProvider) {
                 '' : {templateUrl: 'partials/compound.html'},
                 'header@compound' : {templateUrl: 'partials/header.html', controller: 'NavBarController'},
                 'compoundChebi@compound' : {templateUrl: "partials/compoundChebi.html", controller: 'ComponentController'},
-                'compoundMain@compound' : {templateUrl: "partials/compoundMain.html", controller: 'ComponentController'},
+                // 'compoundMain@compound' : {templateUrl: "partials/compoundMain.html", controller: 'ComponentController'},
                 'compoundPathway@compound' : {templateUrl: "partials/compoundPathway.html"},
                 'compoundOntology@compound' : {templateUrl: "partials/compoundOntology.html"}
             }

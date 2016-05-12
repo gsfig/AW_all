@@ -55,6 +55,12 @@ class Document_model extends CI_Model
 
         // TODO: add mesh to DB
     }
+    private function value_exists($table, $array)
+    {
+        $query = $this->db->get_where($table, $array);
+        return $query->result();
+
+    }
 
     public function post_paper_annotation($idNCBI, $annotation, $user){
 
@@ -65,31 +71,67 @@ class Document_model extends CI_Model
         $query = $this->db->get_where('Paper', array('idNCBI' => $idNCBI));
         $paperid  = $query->result();
 
-
-        // PAPER ID IS 9999 for testing uncomment 2 previous lines
-//        $paperid = 9999;
-
-// TODO: FIQUEI AQUI, ir testando com returns. Tem de estar com a VPN
+        if(count($paperid) > 0){
+            $paperid = (int)$paperid[0]->idPaper;
+        }
+        else{
+            // paper not found in DB, get it
+        }
 
         foreach ($annotation->abstract->sentences as $sentence){
             foreach ($sentence->entities as $entity){
                 // get fkChemicalCompound if not exist => 1 (DB has this)
-                $chebi_id = $entity['chebi_id'];
+
+//                $chebi_id = $entity['chebi_id']; // isto funcionava? talvez seja de estar a usar json temporário para nao ter de anotar??
+                $chebi_id = $entity->chebi_id;
                 $this->db->select('idChemicalCompound');
                 $query = $this->db->get_where('ChemicalCompound', array('chebiid' => $chebi_id));
-                $fkChibi = $query->result();
+                $result = $query->result();
+
+                if(count($result) > 0){
+                    $fkChem = (int)$result[0]->idChemicalCompound;
+                }
+                else{ // there is another chebiID not in the DB
+
+                    // TODO: add new chemical compound to DB and then get it $fkChem = ....
+
+                }
+//                echo "\n";
 
                 $data = array(
-                    'text' => $entity['text'],
-                    'ssm_score' => $entity['ssm_score'],
-                    'fkChemicalCompound' => $fkChibi,
-                    'subtype' => $entity['subtype'],
-                    'chebi_score' => $entity['chebi_score'],
-                    'ssm_entity' => $entity['ssm_entity'],
-                    'type' => $entity['type'],
-                    'offset' => $entity['offset'],
-                    'size' =>$entity['size']
+                    // dava com ['text'] em vez de ->text
+                    'text' => $entity->text,
+                    'ssm_score' => $entity->ssm_score,
+                    'fkChemicalCompound' => $fkChem,
+                    'subtype' => $entity->subtype,
+                    'chebi_score' => $entity->chebi_score,
+                    'ssm_entity' => (int)$entity->ssm_entity,
+                    'type' => $entity->type,
+                    'offset' => $entity->offset,
+                    'size' =>$entity->size
                 );
+
+                // if data already exists in DB doesnt insert
+                $rowExists = $this->value_exists('Annotation', $data);
+//                if(!is_null($rowExists[0])){
+                if(count($rowExists) > 0){
+                    $idAnnotationInserted = (int)$rowExists[0]->idAnnotation;
+                }
+                else{
+                    $idAnnotationInserted = $this->insert($data, 'Annotation');
+                }
+                $PaperAnnotation = array(
+                    'fkpaper' => $paperid,
+                    'fkuser' => $user,
+                    'fkAnnotation' => $idAnnotationInserted
+                );
+                $rowExists = $this->value_exists('PaperAnnotation', $PaperAnnotation);
+                if(count($rowExists) > 0){
+                    $idPaperAnnotationInserted = (int)$rowExists[0]->idPaperAnnotation;
+                }
+                else{
+                    $idPaperAnnotationInserted = $this->insert($PaperAnnotation, 'PaperAnnotation');
+                }
             }
         }
 
@@ -115,17 +157,10 @@ class Document_model extends CI_Model
 //        );
 
 
-        $idInserted = $this->insert($data, 'Annotation');
-
         // insert paperannotation with paper id, user and annotationid
-        $PaperAnnotation = array(
-            'fkpaper' => $paperid,
-            'fkuser' => $user,
-            'fkAnnotation' => $idInserted
-        );
-        $idInserted = $this->insert($PaperAnnotation, 'PaperAnnotation');
 
-        return $data;
+
+        return true;
 
 
 

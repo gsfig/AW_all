@@ -4,7 +4,7 @@ app.controller('ComponentController', ['apiBaseUrl', '$scope', '$http', function
 
     $scope.getDbpedia = function(chemcompound) {
         $http({
-            url: apiBaseUrl + '/cheminfo/',
+            url: apiBaseUrl + '/compound/cheminfo/',
             method: "GET",
             params: {name: chemcompound}
         }).then(function successCallback(response) {
@@ -20,13 +20,16 @@ app.controller('ComponentController', ['apiBaseUrl', '$scope', '$http', function
     };
     $scope.getChebi = function(chebiID) {
         $http({
-            url: apiBaseUrl + '/compounds/',
+            url: apiBaseUrl + '/compound/',
             method: "GET",
             params: {id: chebiID}
         }).then(function successCallback(response) {
-            $scope.chebi = response.data;
+            console.log(response.data.payload);
+            $scope.chebi = response.data.payload;
+
 
         }, function errorCallback(response) {
+            console.log("error Chebi");
             // called asynchronously if an error occurs
             // or server returns response with an error status.
         });

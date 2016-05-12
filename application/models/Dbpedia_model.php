@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: gon
- * Date: 28-04-2016
- * Time: 18:26
- */
+
 class Dbpedia_model extends CI_Model
 {
 
@@ -12,7 +7,6 @@ class Dbpedia_model extends CI_Model
     {
         parent::__construct();
     }
-
 
     function request($url)
     {

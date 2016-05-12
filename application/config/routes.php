@@ -49,12 +49,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples: my-controller/index -> my_controller/index
 |   my-controller/my-method -> my_controller/my_method
 */
-$route['cheminfo'] = 'dbpedia_controller/cheminfo';
 
 
-$route['signup'] = 'login_controller/signup';
-$route['login'] = 'login_controller/login';
-$route['logout'] = 'login_controller/logout';
+
+$route['user/signup'] = 'login_controller/signup';
+$route['user/login'] = 'login_controller/login';
+$route['user/logout'] = 'login_controller/logout';
 
 $route['document'] = 'document_controller/document';
 //$route['document/(:num)'] = 'document_controller/document/id/$1';
@@ -71,7 +71,9 @@ $route['queriesToId'] = 'ncbiController/queriesToId';
 //$route['idToTitle'] = 'ncbiController/IdToTitle';
 //$route['idToLink'] = 'ncbiController/idTolink';
 
-$route['compounds'] = 'chebi_controller/compounds';
+$route['compound'] = 'Chebi_controller/compounds';
+$route['compound/cheminfo'] = 'Chebi_controller/cheminfo';
+
 $route['compounds_ontology'] = 'Chebi_compound/compounds_ontology';
 $route['compounds_pathway'] = 'Chebi_compound/compounds_pathway';
 

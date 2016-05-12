@@ -24,6 +24,13 @@ class API_model extends CI_Model {
 	const CHEBI_METHOD_GETONTOLOGYCHILDREN = 'getOntologyChildren?';
 	const CHEBI_METHOD_GETALLONTOLOGYCHILDRENINPATH ='getOntologyChildrenPath';
 	const CHEBI_CATEGORY = '&searchCategory=CHEBI+NAME';
+	const CHEBI_METHOD_GETLITEENTITY = 'getLiteEntity?';
+
+
+
+
+
+
 	
 	const REACTOME_BASE = 'http://www.reactome.org/AnalysisService/';
 	const REACTOME_METHOD_GETIDENTIFIERID = 'identifier/';
@@ -140,6 +147,24 @@ class API_model extends CI_Model {
 	
 	    return $result;
 	    	
+	}
+	public function chebi_getliteentity_chebi($name){
+		// example
+		// 		http://www.ebi.ac.uk/webservices/chebi/2.0/test/getCompleteEntity?chebiId=CHEBI:15377&searchCategory=CHEBI+NAME
+		// 		base, method, parameter
+		$payload = 'search='.$name;
+		$url = API_model::CHEBI_BASE . API_model::CHEBI_METHOD_GETLITEENTITY . $payload . API_model::CHEBI_CATEGORY;
+
+		$curl = curl_init();
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE); //Return the response as a string instead of outputting it to the screen
+		curl_setopt($curl, CURLOPT_URL, $url);
+		curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/xml'));
+		# Send request.
+		$result = curl_exec($curl);
+		curl_close($curl);
+
+		return $result;
+
 	}
 	
 	public function chebi_getontologyparents_chebi($chebi_ids){

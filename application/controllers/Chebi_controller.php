@@ -13,6 +13,25 @@ class Chebi_controller extends REST_Controller {
         // retrives text from textbox with name="text"
 		return $_POST["text"];
 	}
+    private function send_reply($result, $messageOK, $messageFAIL)
+    {
+        // Check if data store contains documents(in case the database result returns NULL)
+        if ($result) {
+            // Set the response and exit
+            $this->response([
+                'payload' => $result,
+                'message' => "$messageOK"
+            ], REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+
+        } else {
+            // Set the response and exit
+            $this->response([
+                'status' => FALSE,
+                'message' => "$messageFAIL"
+            ], REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
+        }
+    }
+
 	private function getArray($array){
 
 		if(!isset($array)){
@@ -27,389 +46,74 @@ class Chebi_controller extends REST_Controller {
 
 	}
 
-
-
 	public function compounds_get(){
 
-		$this->load->model('API_model');
-		$chebi_ids = $this->get('id');
-		$compound = $this->API_model->chebi_getcompleteentity_chebi($chebi_ids);
-//		echo '<pre>', htmlentities($compound), '</pre>';
-
-		/*echo '<br>'; echo "vardump getentity"; echo '<br>';
-		var_dump($compound);*/
-//		echo $compound;
-//		print_r($compound);
-
-
-		/*echo '<br>'; echo "vardump simplexml"; echo '<br>';
-		print $xml->asXML();*/
-
-//		$array = $this->xml2array($compound, 0, 'tag');
-//		print_r($result);
-
-
-
-
-
-
-
-//		var_dump($xml);
-		$xml = simplexml_load_string($compound);
-//		/*echo '<br>'; echo "simple xml"; echo '<br>';
-//		print_r($xml);*/
-
-		$p = xml_parser_create();
-//		xml_parse_into_struct($p, $compound, $vals);
-		xml_parser_free($p);
-//		echo '<br>'; echo "VALS"; echo '<br>';
-//		print_r($vals);
-//		echo '<br>'; echo "index"; echo '<br>';
-//		print_r($index);
-
-
-		$arrayData = $this->xmlToArray($xml);
-//		echo json_encode($arrayData);
-//		print_r($arrayData);
-//		echo $arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['charge'];
-//		print_r($arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['RegistryNumbers']);
-
-//		foreach ($arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['ChemicalStructures'] as $a){
-//			print_r($a['structure']);echo '<br>';
-//			print_r($a['type']);echo '<br>';
-//			print_r($a['dimension']);echo '<br>';
-//			print_r($a['defaultStructure']);echo '<br>';
-//		}
-		$path = array('Envelope', 'S:Body', 'getCompleteEntityResponse','return');
-		$Envelope = 'Envelope';
-		$Body = 'S:Body';
-		$entity = 'getCompleteEntityResponse';
-		$r = 'return';
-		$chebiid = 'chebiId';
-		$acsii = 'chebiAsciiName';
-		$def = 'definition';
-		$Formulae = 'Formulae';
-		$charge = 'charge';
-		$struc = 'ChemicalStructures';
-		$iupac = 'IupacNames';
-		$inchi = 'inchi';
-		$inchiKey = 'inchiKey';
-		$Synonyms = 'Synonyms';
-		$reg = 'RegistryNumbers';
-
-		$isarry = $arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['ChemicalStructures'];
-//		echo '<br>'; echo "is array???"; echo '<br>';
-
-//		echo '<br>'; echo "cont"; echo '<br>';
-//		echo count($isarry);
-//		echo '<br>'; echo "is array [0]"; echo '<br>';
-//		echo is_array($isarry[0]);
-//		echo '<br>'; echo "get Array"; echo '<br>';
-//		echo '<pre>', print_r($this->getArray($isarry)), '</pre>';
-
-//		echo '<br>';
-//		echo '<pre>', print_r($isarry), '</pre>';
-
-//		echo '<br>'; echo "is array???"; echo '<br>';
-//		return is_array($isarry);
-
-
-		$return = array(
-			"ChebiID"=>
-				isset($arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['chebiId'])?
-				$arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['chebiId']:
-				null,
-			"Chebiascii"=>
-				isset($arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['chebiAsciiName']) ?
-				$arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['chebiAsciiName'] :
-				null,
-			"definition"=>
-				isset($arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['definition'])?
-				$arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['definition'] :
-				null,
-			"Formulae" =>
-				isset($arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['Formulae'])?
-				$arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['Formulae'] :
-				null,// array
-			"charge" =>
-				isset($arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['charge'])?
-				$arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['charge'] :
-				null,
-			"ChemicalStructures" =>
-				isset($arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['ChemicalStructures'])?
-					$arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['ChemicalStructures'] :
-					null,// array
-			"IupacNames" =>
-				isset($arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['IupacNames'])?
-				$arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['IupacNames'] :
-				null,// array
-			"inchi" =>
-				isset($arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['inchi'])?
-				$arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['inchi'] :
-				null,
-			"inchiKey" =>
-				isset($arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['inchiKey'])?
-				$arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['inchiKey'] :
-				null,
-			"Synonyms" =>
-				isset($arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['Synonyms'])?
-				$arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['Synonyms']:
-				null,// array
-			"RegistryNumbers" =>
-				isset($arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['RegistryNumbers']) ?
-				$arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['RegistryNumbers'] :
-				null // array
-		);
-		echo json_encode($return);
-
-
-
-//		echo "<script src='../../js/xml2json.js'></script>  <script>   new X2JS().xml2json('$compound');  </script>"
-
-//		$variable = $_POST['variable'];
-//		echo '<br>'; echo "Variable"; echo '<br>';
-//		print_r($variable);
-
-/*
-		foreach ($index as $key=>$val) {
-			if ($key == "molecule") {
-				$molranges = $val;
-				// each contiguous pair of array entries are the
-				// lower and upper range for each molecule definition
-				for ($i=0; $i < count($molranges); $i+=2) {
-					$offset = $molranges[$i] + 1;
-					$len = $molranges[$i + 1] - $offset;
-					$tdb[] = parseMol(array_slice($values, $offset, $len));
-				}
-			} else {
-				continue;
-			}
-		}
-		return $tdb;
-	}
-
-	function parseMol($mvalues)
-	{
-		for ($i=0; $i < count($mvalues); $i++) {
-			$mol[$mvalues[$i]["tag"]] = $mvalues[$i]["value"];
-		}
-		return new AminoAcid($mol);
-	}*/
-
-
-
-
-
-
-
-
-
-
-/*		$keys = array(
-			"chebi"=>"CHEBIID",
-			"chebiascii"=>"CHEBIASCIINAME",
-			"definition"=>"DEFINITION",
-			"formulae" => "FORMULAE",// array
-			"charge" => "CHARGE",
-			"chemStruct" => "CHEMICALSTRUCTURES", // array
-			"iupac" => "IUPACNAMES", // array
-			"inchi" => "INCHI",
-			"inchikey" => "INCHIKEY",
-			"synonyms" => "SYNONYMS",// array
-			"registrynumbers" => "REGISTRYNUMBERS"// array
-			);
-		$values = array(
-			"chebi"=>"value",
-			"chebiascii"=>"value",
-			"definition"=>"value",
-			"formulae" => "FORMULAE",// array
-			"charge" => "CHARGE",
-			"chemStruct" => "CHEMICALSTRUCTURES", // array
-			"iupac" => "IUPACNAMES", // array
-			"inchi" => "INCHI",
-			"inchikey" => "INCHIKEY",
-			"synonyms" => "SYNONYMS",// array
-			"registrynumbers" => "REGISTRYNUMBERS"// array
-		);*/
-
-
-
-//		echo '<br>'; echo "Formulae"; echo '<br>';
-//		$index = $index['FORMULAE']['0'];
-//		echo 'index: '. $index;echo '<br>';
-//		$n = ++$index;
-//		$value = $vals[$n]['value'];
-//		echo 'value: '. $value; echo '<br>';
-
-//		echo '<br>'; echo "chemStruct"; echo '<br>';
-//		$index = $index[$keys['chemStruct']]['0'];
-//		echo 'index: '. $index;echo '<br>';
-//		$n = ++$index;
-//		$value = $vals[$n]['value'];
-//		echo 'value: '. $value; echo '<br>';
-
-
-
-
-
-
-
-
-//		$result = $this->xml2array($compound, 0, 'tag');
-//		$result2 = $result['S:Envelope']['S:Body']['getCompleteEntityResponse']['return'];
-
-//		$result = $this->xmlstr_to_array($compound);
-//		print_r($result);
-//		$chebiId = $result2['chebiId'];
-//		$chebiAsciiName = $result2['chebiAsciiName'];
-//		$definition = $result2['definition'];
-
-
-
-//		echo '<br>'; echo "ALLL"; echo '<br>';
-
-
-		/*echo "Index array\n";
-		print_r($index);
-		echo '<br>'; echo "vals"; echo '<br>';
-		echo "\nVals array\n";
-		print_r($vals);*/
-
-
-
-
-
-		/*echo '<br>'; echo "Children"; echo '<br>';
-		foreach ($xml->children() as $child)
-		{
-			echo "Child node: " . var_dump($child) . "<br>";
-		}*/
-
-
-
-
-		/*$doc = new DOMDocument();
-		$doc->loadXML($compound);
-		$dom_article = $doc->documentElement;
-		$entities = $dom_article->getElementsByTagName("*");
-
-		foreach($entities as $e){ // get the image tags
-
-			if ($e->hasAttributes()) {
-				echo '<br>';echo '<br>';echo "Has atribute";echo '<br>';
-				var_dump($e);
-				for ($i = $e->attributes->length - 1; $i >= 0; --$i)
-					$e->removeAttributeNode($e->attributes->item($i));
-			}
-		}
-		echo '<br>'; echo "DOMDocument"; echo '<br>';
-		echo '<pre>', htmlentities($doc->saveXML()), '</pre>';*/
-		
-		
-		
-		
-
-//		echo '<br>'; echo "namespace"; echo '<br>';
-//		$namespaces = $xml->getDocNamespaces();
-//		var_dump($namespaces);
-
-
-//		echo '<br>'; echo "prefix and namespace"; echo '<br>';
-		/*echo $namespaces["S"];echo '<br>';
-		print_r(array_keys($namespaces));echo '<br>';
-		echo array_keys($namespaces)[0];*/
-
-//		$prefix = array_keys($namespaces)[0] ;
-//		$namespace = $namespaces[$prefix];
-//		echo $prefix;echo '<br>';
-//		echo $namespace;
-
-		/*$trimed = str_replace($prefix . ':', "",$compound );
-		$trimed = str_replace($namespace, "",$trimed );*/
-
-		// Remove the XML namespace opening tags
-//		$string = str_replace('<S:', '<', $compound);
-		// Remove the XML namespace closing tags
-//		$string = str_replace('</S:', '</', $string);
-		// For good measure, remove anything that has to do with XML namespace
-//		$string = str_replace('xmlns:S', 'nonsense', $string);
-//		$string = str_replace('xmlns=', '', $string);
-//		$string = str_replace($namespace, '', $string);
-//		echo '<br>'; echo "replace1"; echo '<br>';
-//		echo '<pre>', htmlentities($string), '</pre>';
-		// Load into simplexml_load_string()
-//		$xml = simplexml_load_string($string);
-		// Echoes Success
-//		echo $xml->Response[0]->ResponseStatus[0]->StatusCode;
-//		echo '<br>'; echo "replace"; echo '<br>';
-//		echo '<pre>', htmlentities($string), '</pre>';
-//		var_dump($xml);
-//		echo '<pre>', htmlentities($xml), '</pre>';
-//		echo (string) $xml->Envelope[0]->Body[0]->getCompleteEntityResponse;
-
-//		foreach( $xml as $a){
-//			echo $a;
-//		}
-
-
-
-//		echo '<br>'; echo "xpath"; echo '<br>';
-//		$xml->registerXPathNamespace($prefix, $namespace);
-//		$result = $xml->xpath('///');
-//		print_r($result);
-
-
-
-
-//		echo '<br>'; echo "trimmed"; echo '<br>';
-//
-//		echo '<pre>', htmlentities($trimed), '</pre>';
-
-
-
-
-
-
-
-//		$sxe->registerXPathNamespace('c','http://example.org/chapter-title');
-
-
-//		$pmid = (string) $xml->S:envelope->MedlineCitation->PMID;
-		/*echo '<br>'; echo "simpleXMLElement"; echo '<br>';
-		$xmlelm = new SimpleXMLElement($xml);
-		foreach($xmlelm->children() as $child) {
-			echo $child->getName();
-		}*/
-
-
-		/*$n = $namespaces[0];
-		echo $n;*/
-
-//		str_replace()
-
-//		echo '<br>'; echo "simple xml after remove"; echo '<br>';
-
-
-
-
-		/*$json = json_encode($xml);
-
-
-		echo '<br>'; echo "json encode"; echo '<br>';
-		var_dump($json);
-		$array = json_decode($json,TRUE);
-
-
-		echo '<br>'; echo "json decode" ; echo '<br>';
-		print_r($array);*/
-
-
-
+        $this->load->model('Chemical_model');
+
+		$chebi_id = $this->get('id');
+        
+        if(!is_numeric($chebi_id)){
+//            $chem_name = $chebi_id;
+//            $chebi_id = $this->Chemical_model->getChemicalByName($chem_name);
+            $this->send_reply(null, "ok", "Please enter a valid Chebi ID");
+            die();
+        }
+
+        $ChemProperties = $this->Chemical_model->getChemical($chebi_id);
+        if(count($ChemProperties) < 1){
+             // get from Chebi
+            $ChemFromChebi = $this->chebiGetEntity($chebi_id);
+            // can be array or not:
+            // Chemical structures,
+            // IupacNames
+            // Synonyms
+            // RegistryNumbers
+
+            // save to DB
+//            print("going to insert DB"); echo "\n";
+            $inserted = $this->Chemical_model->post_ChemicalDB($ChemFromChebi);
+
+            //get from DB
+            $ChemProperties = $this->Chemical_model->getChemical($chebi_id);
+            $chemName = $ChemProperties[0]->chebiname;
+
+            $chemName = ucwords($chemName);
+            $data = $this->cheminfo($chemName);
+
+//            echo "cheminfo dbpedia: \n";
+//            print_r($data);
+
+            if(isset($data)){
+                $smiles = isset($data->results->bindings[0]->smiles->value) ?
+                    $data->results->bindings[0]->smiles->value :
+                    null;
+                $molecularWeight = isset($data->results->bindings[0]->molecularWeight-> value) ?
+                    $data->results->bindings[0]->molecularWeight-> value :
+                    null;
+
+                $pubchem = isset($data->results->bindings[0]->pubchem-> value) ?
+                    $data->results->bindings[0]->pubchem-> value :
+                    null;
+
+                $data = array(
+                    'smiles' => $smiles,
+                    'pubchem' => $pubchem,
+                    'molecularWeight' => $molecularWeight
+                );
+                $this-> Chemical_model -> updateDbpedia($chebi_id, $data);
+
+                $ChemProperties = $this->Chemical_model->getChemical($chebi_id); // get chemical with Dbpedia info
+
+            }
+        }
+
+        $this->send_reply($ChemProperties, "ok", "Chemical not found in Chebi");
+//        return $ChemProperties;
 
 	}
 
-    
-    public function compounds_main()
+    // TODO: DELETE, this is bdpedia
+/*    public function compounds_main()
 	{		
         // loads API model to use below
 		$this->load->model('API_model');
@@ -430,284 +134,203 @@ class Chebi_controller extends REST_Controller {
 			
 			// SAVE DB
     
-    }  
-    
-    public function compounds_ontology()
-	{		
-        // loads API model to use below
-		$this->load->model('API_model');
-		// remove white space
-		$chebi_ids = preg_replace('/\s+/', '', $this->pull_data());
-	
-    // check if compound exists in DB
-		// if exists, return data
-		
-		// if does not exist, get ontology parents, save to DB
-		
-			// GET ONTOLOGY PARENTS
-            // GET ONTOLOGY CHILDREN
-            // GET ALL ONTOLOGY CHILDREN IN PATH
-			
-			// send API model text from textbox(chebi ID)
-			// returns 
-			$parents = $this->API_model->chebi_getontologyparents_chebi($chebi_ids);
-			echo '<pre>', htmlentities($parents), '</pre>';
+    }*/
+    /*
+     * WebService
+     */
+      public function cheminfo_get(){
+          // TODO: vai só buscar resultado, ou outra função para ser usada do front end
 
-            $child = $this->API_model->chebi_getontologychildren_chebi($chebi_ids);
-			echo '<pre>', htmlentities($child), '</pre>';
-        
-            $path = $this->API_model->chebi_getallontologychildreninpath_chebi($chebi_ids);
-			echo '<pre>', htmlentities($path), '</pre>';
-        
-			
-			// SAVE DB
-    
-    } 
+        $term = $this->get('name');
+        $url = $this->getUrlDbpedia($term);
+        $this->load->model('Dbpedia_model');
+        $result =  json_decode($this->Dbpedia_model->request($url));
+        $this->send_reply($result, "", "request failed");
+//        return $result;
+    }
+    /*
+     * same as cheminfo_get but for controller usage
+     */
+    private function cheminfo($term){
+        $url = $this->getUrlDbpedia($term);
+        $this->load->model('Dbpedia_model');
+        $result =  json_decode($this->Dbpedia_model->request($url));
+        return $result;
+    }
+
+
+    private function getUrlDbpedia($term)
+    {
+//        Cefatrizine 131730
+
+        /* Dá todos os que pertencem a Chemical114806838
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX type: <http://dbpedia.org/class/yago/>
+PREFIX prop: <http://dbpedia.org/property/>
+PREFIX res: <http://dbpedia.org/resource/>
+SELECT ?a
+WHERE { ?a a type:Chemical114806838 }
+        */
+
+        $format = 'json';
+        $query = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+            PREFIX type: <http://dbpedia.org/class/yago/>
+            PREFIX prop: <http://dbpedia.org/property/>
+            PREFIX res: <http://dbpedia.org/resource/>
+            SELECT ?smiles ?molecularWeight ?pubchem 
+            WHERE {
+                    res:" . $term . " a type:Chemical114806838 ;
+                    prop:smiles ?smiles ;
+                    prop:molecularWeight ?molecularWeight ;
+                    prop:pubchem ?pubchem.
+                }";
+        $searchUrl = 'http://dbpedia.org/sparql?'
+            . 'query=' . urlencode($query)
+            . '&format=' . $format;
+
+        return $searchUrl;
+    }
+
+    private function chebiGetEntity($chebi_ids){
+        // can be array or not:
+        // Chemical structures,
+        // IupacNames
+        // Synonyms
+        // RegistryNumbers
+
+
+        $this->load->model('API_model');
+        $compound = $this->API_model->chebi_getcompleteentity_chebi($chebi_ids);
+
+//        print("chebiGetEntity");
+//        print_r($compound);
+
+        if(is_null($compound) || count($compound)< 1){
+            return null;
+        }
+
+        $xml = simplexml_load_string($compound);
+
+        $p = xml_parser_create();
+        xml_parser_free($p);
+
+        $arrayData = $this->xmlToArray($xml);
+
+        $return = array(
+            "ChebiID"=>
+                isset($arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['chebiId'])?
+                    $arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['chebiId']:
+                    null,
+            "Chebiascii"=>
+                isset($arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['chebiAsciiName']) ?
+                    $arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['chebiAsciiName'] :
+                    null,
+            "definition"=>
+                isset($arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['definition'])?
+                    $arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['definition'] :
+                    null,
+            "Formulae" =>
+                isset($arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['Formulae'])?
+                    $arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['Formulae'] :
+                    null,// array
+            "charge" =>
+                isset($arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['charge'])?
+                    $arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['charge'] :
+                    null,
+            "ChemicalStructures" =>
+                isset($arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['ChemicalStructures'])?
+                    $arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['ChemicalStructures'] :
+                    null,// array
+            "IupacNames" =>
+                isset($arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['IupacNames'])?
+                    $arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['IupacNames'] :
+                    null,// array
+            "inchi" =>
+                isset($arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['inchi'])?
+                    $arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['inchi'] :
+                    null,
+            "inchiKey" =>
+                isset($arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['inchiKey'])?
+                    $arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['inchiKey'] :
+                    null,
+            "Synonyms" =>
+                isset($arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['Synonyms'])?
+                    $arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['Synonyms']:
+                    null,// array
+            "RegistryNumbers" =>
+                isset($arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['RegistryNumbers']) ?
+                    $arrayData['Envelope']['S:Body']['getCompleteEntityResponse']['return']['RegistryNumbers'] :
+                    null // array
+        );
+        return json_encode($return);
+
+    }
+
+
+
+    public function compounds_ontology()
+    {
+        // loads API model to use below
+        $this->load->model('API_model');
+        // remove white space
+        $chebi_ids = preg_replace('/\s+/', '', $this->pull_data());
+
+        // check if compound exists in DB
+        // if exists, return data
+
+        // if does not exist, get ontology parents, save to DB
+
+        // GET ONTOLOGY PARENTS
+        // GET ONTOLOGY CHILDREN
+        // GET ALL ONTOLOGY CHILDREN IN PATH
+
+        // send API model text from textbox(chebi ID)
+        // returns
+        $parents = $this->API_model->chebi_getontologyparents_chebi($chebi_ids);
+        echo '<pre>', htmlentities($parents), '</pre>';
+
+        $child = $this->API_model->chebi_getontologychildren_chebi($chebi_ids);
+        echo '<pre>', htmlentities($child), '</pre>';
+
+        $path = $this->API_model->chebi_getallontologychildreninpath_chebi($chebi_ids);
+        echo '<pre>', htmlentities($path), '</pre>';
+
+
+        // SAVE DB
+
+    }
     public function compounds_pathway()
     {
         // loads API model to use below
         $this->load->model('API_model');
         // remove white space
         $chebi_ids = preg_replace('/\s+/', '', $this->pull_data());
-    
+
         // check if compound exists in DB
         // if exists, return data
-    
+
         // if does not exist, get pathways, save to DB
-    
+
         // GET PATHWAYS
         // GET PROJECTIONS HOMO SAPIENS
-        	
+
         // send API model text from textbox(chebi ID)
         // returns
         $pathways = $this->API_model->reactome_getidentifierid_chebi($chebi_ids);
         echo '<pre>', htmlentities($pathways), '</pre>';
-    
+
         $projections = $this->API_model->reactome_getidentifierprojection_chebi($chebi_ids);
         echo '<pre>', htmlentities($projections), '</pre>';
-    
-        	
+
+
         // SAVE DB
-    
+
     }
-	/**
-	 * xml2array() will convert the given XML text to an array in the XML structure.
-	 * Link: http://www.bin-co.com/php/scripts/xml2array/
-	 * Arguments : $contents - The XML text
-	 *                $get_attributes - 1 or 0. If this is 1 the function will get the attributes as well as the tag values - this results in a different array structure in the return value.
-	 *                $priority - Can be 'tag' or 'attribute'. This will change the way the resulting array sturcture. For 'tag', the tags are given more importance.
-	 * Return: The parsed XML in an array form. Use print_r() to see the resulting array structure.
-	 * Examples: $array =  xml2array(file_get_contents('feed.xml'));
-	 *              $array =  xml2array(file_get_contents('feed.xml', 1, 'attribute'));
-	 */
-	function xml2array($contents, $get_attributes=0, $priority = 'tag') {
-		if(!$contents) return array();
-
-		if(!function_exists('xml_parser_create')) {
-			//print "'xml_parser_create()' function not found!";
-			return array();
-		}
-
-		//Get the XML parser of PHP - PHP must have this module for the parser to work
-		$parser = xml_parser_create('');
-		xml_parser_set_option($parser, XML_OPTION_TARGET_ENCODING, "UTF-8"); # http://minutillo.com/steve/weblog/2004/6/17/php-xml-and-character-encodings-a-tale-of-sadness-rage-and-data-loss
-		xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
-		xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, 1);
-		xml_parse_into_struct($parser, trim($contents), $xml_values);
-		xml_parser_free($parser);
-
-		if(!$xml_values) return;//Hmm...
-
-		//Initializations
-		$xml_array = array();
-		$parents = array();
-		$opened_tags = array();
-		$arr = array();
-
-		$current = &$xml_array; //Refference
-
-		//Go through the tags.
-		$repeated_tag_index = array();//Multiple tags with same name will be turned into an array
-		foreach($xml_values as $data) {
-			unset($attributes,$value);//Remove existing values, or there will be trouble
-
-			//This command will extract these variables into the foreach scope
-			// tag(string), type(string), level(int), attributes(array).
-			extract($data);//We could use the array by itself, but this cooler.
-
-			$result = array();
-			$attributes_data = array();
-
-			if(isset($value)) {
-				if($priority == 'tag') $result = $value;
-				else $result['value'] = $value; //Put the value in a assoc array if we are in the 'Attribute' mode
-			}
-
-			//Set the attributes too.
-			if(isset($attributes) and $get_attributes) {
-				foreach($attributes as $attr => $val) {
-					if($priority == 'tag') $attributes_data[$attr] = $val;
-					else $result['attr'][$attr] = $val; //Set all the attributes in a array called 'attr'
-				}
-			}
-
-			//See tag status and do the needed.
-			if($type == "open") {//The starting of the tag '<tag>'
-				$parent[$level-1] = &$current;
-				if(!is_array($current) or (!in_array($tag, array_keys($current)))) { //Insert New tag
-					$current[$tag] = $result;
-					if($attributes_data) $current[$tag. '_attr'] = $attributes_data;
-					$repeated_tag_index[$tag.'_'.$level] = 1;
-
-					$current = &$current[$tag];
-
-				} else { //There was another element with the same tag name
-
-					if(isset($current[$tag][0])) {//If there is a 0th element it is already an array
-						$current[$tag][$repeated_tag_index[$tag.'_'.$level]] = $result;
-						$repeated_tag_index[$tag.'_'.$level]++;
-					} else {//This section will make the value an array if multiple tags with the same name appear together
-						$current[$tag] = array($current[$tag],$result);//This will combine the existing item and the new item together to make an array
-						$repeated_tag_index[$tag.'_'.$level] = 2;
-
-						if(isset($current[$tag.'_attr'])) { //The attribute of the last(0th) tag must be moved as well
-							$current[$tag]['0_attr'] = $current[$tag.'_attr'];
-							unset($current[$tag.'_attr']);
-						}
-
-					}
-					$last_item_index = $repeated_tag_index[$tag.'_'.$level]-1;
-					$current = &$current[$tag][$last_item_index];
-				}
-
-			} elseif($type == "complete") { //Tags that ends in 1 line '<tag />'
-				//See if the key is already taken.
-				if(!isset($current[$tag])) { //New Key
-					$current[$tag] = $result;
-					$repeated_tag_index[$tag.'_'.$level] = 1;
-					if($priority == 'tag' and $attributes_data) $current[$tag. '_attr'] = $attributes_data;
-
-				} else { //If taken, put all things inside a list(array)
-					if(isset($current[$tag][0]) and is_array($current[$tag])) {//If it is already an array...
-
-						// ...push the new element into that array.
-						$current[$tag][$repeated_tag_index[$tag.'_'.$level]] = $result;
-
-						if($priority == 'tag' and $get_attributes and $attributes_data) {
-							$current[$tag][$repeated_tag_index[$tag.'_'.$level] . '_attr'] = $attributes_data;
-						}
-						$repeated_tag_index[$tag.'_'.$level]++;
-
-					} else { //If it is not an array...
-						$current[$tag] = array($current[$tag],$result); //...Make it an array using using the existing value and the new value
-						$repeated_tag_index[$tag.'_'.$level] = 1;
-						if($priority == 'tag' and $get_attributes) {
-							if(isset($current[$tag.'_attr'])) { //The attribute of the last(0th) tag must be moved as well
-
-								$current[$tag]['0_attr'] = $current[$tag.'_attr'];
-								unset($current[$tag.'_attr']);
-							}
-
-							if($attributes_data) {
-								$current[$tag][$repeated_tag_index[$tag.'_'.$level] . '_attr'] = $attributes_data;
-							}
-						}
-						$repeated_tag_index[$tag.'_'.$level]++; //0 and 1 index is already taken
-					}
-				}
-
-			} elseif($type == 'close') { //End of tag '</tag>'
-				$current = &$parent[$level-1];
-			}
-		}
-
-		return($xml_array);
-	}
 
 
 
 
-
-
-
-
-
-
-
-
-
-	/**
-	 * convert xml string to php array - useful to get a serializable value
-	 *
-	 * @param string $xmlstr
-	 * @return array
-	 *
-	 * @author Adrien aka Gaarf & contributors
-	 * @see http://gaarf.info/2009/08/13/xml-string-to-php-array/
-	 */
-	function xmlstr_to_array($xmlstr) {
-		$doc = new DOMDocument();
-		$doc->loadXML($xmlstr);
-		$root = $doc->documentElement;
-		$output = $this->domnode_to_array($root);
-		$output['@root'] = $root->tagName;
-		return $output;
-	}
-	function domnode_to_array($node) {
-		$output = array();
-		switch ($node->nodeType) {
-			case XML_CDATA_SECTION_NODE:
-			case XML_TEXT_NODE:
-				$output = trim($node->textContent);
-				break;
-			case XML_ELEMENT_NODE:
-				for ($i=0, $m=$node->childNodes->length; $i<$m; $i++) {
-					$child = $node->childNodes->item($i);
-					$v = $this->domnode_to_array($child);
-					if(isset($child->tagName)) {
-						$t = $child->tagName;
-						if(!isset($output[$t])) {
-							$output[$t] = array();
-						}
-						$output[$t][] = $v;
-					}
-					elseif($v || $v === '0') {
-						$output = (string) $v;
-					}
-				}
-				if($node->attributes->length && !is_array($output)) { //Has attributes but isn't an array
-					$output = array('@content'=>$output); //Change output into an array.
-				}
-				if(is_array($output)) {
-					if($node->attributes->length) {
-						$a = array();
-						foreach($node->attributes as $attrName => $attrNode) {
-							$a[$attrName] = (string) $attrNode->value;
-						}
-						$output['@attributes'] = $a;
-					}
-					foreach ($output as $t => $v) {
-						if(is_array($v) && count($v)==1 && $t!='@attributes') {
-							$output[$t] = $v[0];
-						}
-					}
-				}
-				break;
-		}
-		return $output;
-	}
-
-
-
-
-
-
-
-
-
-
-
-	/**
+    /**
 	 * Create plain PHP associative array from XML.
 	 *
 	 * Example usage:
@@ -722,7 +345,7 @@ class Chebi_controller extends REST_Controller {
 	 * @author Tamlyn Rhodes <http://tamlyn.org>
 	 * @license http://creativecommons.org/publicdomain/mark/1.0/ Public Domain
 	 */
-	function xmlToArray($xml, $options = array()) {
+	private function xmlToArray($xml, $options = array()) {
 		$defaults = array(
 			'namespaceSeparator' => ':',//you may want this to be something other than a colon
 			'attributePrefix' => '@',   //to distinguish between attributes and nodes with the same name

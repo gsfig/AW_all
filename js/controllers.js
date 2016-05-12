@@ -74,7 +74,6 @@ app.controller('DocumentJSController', ['apiBaseUrl', '$scope', '$http', functio
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
             }).then(function successCallback(response) {
                 $scope.ibent_annotation = response.data.payload;
-                console.log($scope.ibent_annotation);
             }, function errorCallback(response) {
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
@@ -101,8 +100,3 @@ app.controller('DocumentJSController', ['apiBaseUrl', '$scope', '$http', functio
 
     }
 }]); //end documentJSController
-
-
-
-
-
