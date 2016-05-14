@@ -88,12 +88,16 @@ class Document_model extends CI_Model
                 $query = $this->db->get_where('ChemicalCompound', array('chebiid' => $chebi_id));
                 $result = $query->result();
 
+                echo "chem from annotation: "; print_r($chebi_id); echo "\n";
+                echo "chem from DB: "; print_r($result); echo "\n";
+
                 if(count($result) > 0){
                     $fkChem = (int)$result[0]->idChemicalCompound;
                 }
                 else{ // there is another chebiID not in the DB
 
                     // TODO: add new chemical compound to DB and then get it $fkChem = ....
+                    
 
                 }
 //                echo "\n";

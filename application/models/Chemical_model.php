@@ -34,11 +34,16 @@ class Chemical_model extends CI_Model
         $query = $this->db->get_where('ChemicalCompound', array('chebiid' => $chebi_id));
         $array = $query->result();
 
+//        print_r($array[0]);
+
         $chemid = $array[0]->idChemicalCompound;
         $query = $this->db->get_where('Iupac', array('fkchemcomp' => $chemid));
         $iupac = $query->result();
-        $array[0]->iupacName = $iupac[0]->name;
-        $array[0]->iupacType = $iupac[0]->iupacType;
+
+        if(!empty($iupac)){
+            $array[0]->iupacName = $iupac[0]->name;
+            $array[0]->iupacType = $iupac[0]->iupacType;
+        }
 
         $query = $this->db->get_where('Synonym', array('fkchemcomp' => $chemid));
         $synonyms = $query->result();

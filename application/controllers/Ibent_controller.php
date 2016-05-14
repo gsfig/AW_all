@@ -41,11 +41,6 @@ class Ibent_controller extends REST_Controller {
 		}
 	}
 
-	
-
-
-
-
 	// TODO: Remove this function
 	public function idToAbstract()
 	{

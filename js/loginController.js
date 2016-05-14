@@ -14,7 +14,7 @@ app.controller('LoginController',['$scope','$http','$uibModalInstance', 'apiBase
     $scope.signUserUp = function (){
         $http({
             method: "post",
-            url: apiBaseUrl + "user/signup",
+            url: apiBaseUrl + "/user/signup",
             data: {
                 username: $scope.signUpInfo.username,
                 email: $scope.signUpInfo.email,
@@ -32,7 +32,7 @@ app.controller('LoginController',['$scope','$http','$uibModalInstance', 'apiBase
         // window.alert(apiBaseUrl);
         $http({
             method: "post",
-            url: apiBaseUrl + "user/login",
+            url: apiBaseUrl + "/user/login",
             data: {
                 username: $scope.loginInfo.username,
                 password: $scope.loginInfo.password

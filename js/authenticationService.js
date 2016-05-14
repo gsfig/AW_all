@@ -21,7 +21,7 @@ app.service('AuthenticationService', function($http, apiBaseUrl){
         // Webservice logout
         $http({
             method: "post",
-            url: apiBaseUrl + "user/logout",
+            url: apiBaseUrl + "/user/logout",
             data: {
                 username: localStorage.getItem("username"),
                 token: localStorage.getItem("token")

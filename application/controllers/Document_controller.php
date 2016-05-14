@@ -4,6 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 // This can be removed if you use __autoload() in config.php OR use Modular Extensions
 require APPPATH . '/libraries/REST_Controller.php';
 
+
 class Document_controller extends REST_Controller
 {
 
@@ -141,6 +142,21 @@ class Document_controller extends REST_Controller
         $data = json_decode(file_get_contents("php://input"));
         $idNCBI = $data->idNCBI;
 
+        // TODO: AQUI !!!!!
+        // get paperid if exists
+        // get paper if not exists
+
+        // for each annotation
+            // compose annotation to give model
+                // get chemID, check DB for fk
+                    // get and insert new chemical if not exists
+            // insert in DB
+
+        // use new model, check post_paper_annotation only for workflow
+
+
+
+
 
 
         if(false){ // if annotation exists for this paper
@@ -171,6 +187,13 @@ class Document_controller extends REST_Controller
             // TODO: check user from front end
             $user = null;
             
+            
+            
+            
+            
+            
+            
+            
             $addedToDB = $this->Document_model->post_paper_annotation($idNCBI, $annotation, $user);
             $this->send_reply($addedToDB, "added to DB", "ibent error");
 
@@ -187,11 +210,4 @@ class Document_controller extends REST_Controller
 
 //        $this->send_reply($result, "ok", "ibent error");
     }
-
-
-
-
-    
-    
-    
 }
