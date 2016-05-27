@@ -1,5 +1,5 @@
 'use strict';
-app.controller('DocumentJSController', ['apiBaseUrl', '$scope', '$http', function(apiBaseUrl, $scope, $http){
+app.controller('DocumentJSController', ['apiBaseUrl', '$scope', '$http','$state', function(apiBaseUrl, $scope, $http, $state){
     var idPaperInView = undefined;
     // WEBSERVICE to /document
     // document is available in $scope ( in the tags that have 'data-ng-controller="documentJSController')
@@ -45,10 +45,12 @@ app.controller('DocumentJSController', ['apiBaseUrl', '$scope', '$http', functio
         if(!foundID){
             // WEBSERVICE to /document/:id
             // document_requested is available in $scope ( in the tags that have 'data-ng-controller="documentJSController')
+            var urlcomplete = apiBaseUrl + '/document/' + '?id=' + id;
             $http({
-                url: apiBaseUrl + '/document/',
-                method: "GET",
-                params: {id: id}
+                // url: apiBaseUrl + '/document/',
+                url : urlcomplete,
+                method: "GET"
+                // params: {id: id}
             }).then(function successCallback(response) {
                 $scope.document_requested = response.data;
                 $scope.showAbstract($scope.document_requested.payload[0].title, $scope.document_requested.payload[0].abstract,$scope.document_requested.payload[i].idNCBI );
@@ -65,13 +67,16 @@ app.controller('DocumentJSController', ['apiBaseUrl', '$scope', '$http', functio
             console.error("Paper id is undefined")
         }
         else{
+            var urlComplete = apiBaseUrl + "/document/" + id + "/annotation" ;
             $http({
-                method: "post",
-                url: apiBaseUrl + "/document/annotation",
-                data: {
-                    idNCBI: id
-                },
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
+                method: "GET",
+                // url: apiBaseUrl + "/document/annotation",
+                url: urlComplete
+                // data: {
+                //     idNCBI: id
+                //     // add user
+                // },
+                // headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
             }).then(function successCallback(response) {
                 $scope.ibent_annotation = response.data.payload;
             }, function errorCallback(response) {
@@ -99,4 +104,12 @@ app.controller('DocumentJSController', ['apiBaseUrl', '$scope', '$http', functio
         });
 
     }
+
+    $scope.changeState = function(){
+        $state.transitionTo('compound');
+
+
+    }
+
+
 }]); //end documentJSController

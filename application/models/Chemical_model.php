@@ -35,6 +35,9 @@ class Chemical_model extends CI_Model
         $array = $query->result();
 
 //        print_r($array[0]);
+        if(count($array) < 1){
+            return $array;
+        }
 
         $chemid = $array[0]->idChemicalCompound;
         $query = $this->db->get_where('Iupac', array('fkchemcomp' => $chemid));
@@ -80,6 +83,8 @@ class Chemical_model extends CI_Model
     }
 
     public function post_ChemicalDB($ChemProperties){
+
+//        echo "post_ChemicalDB, chem from chebi: "; print_r($ChemProperties); echo "\n";
 
 //        echo "chem model post chemDB \n";
 
@@ -129,6 +134,32 @@ class Chemical_model extends CI_Model
             }
 
         }
+        if(is_null($chemProp->Formulae)){
+            $formula_source = null;
+            $formula_data = null;
+        }
+        else{
+            $formula_source = isset($chemProp->Formulae->source) ?
+                $chemProp->Formulae->source :
+                    null;
+            $formula_data = isset($chemProp->Formulae->data) ?
+                $chemProp->Formulae->data :
+                    null;
+
+            if(is_null($formula_source)){
+
+                $formula_source = isset($chemProp->Formulae[0]->source) ?
+                    $chemProp->Formulae[0]->source :
+                    null;
+            }
+            if(is_null($formula_data)){
+
+                $formula_data = isset($chemProp->Formulae[0]->data) ?
+                    $chemProp->Formulae[0]->data :
+                    null;
+            }
+
+        }
         $chebiid = (int)str_replace('CHEBI:', '', $chemProp->ChebiID);
         $data = array(
             // dava com ['text'] em vez de ->text
@@ -137,8 +168,8 @@ class Chemical_model extends CI_Model
             'smiles' => null,
             'inchi' => $chemProp->inchi,
             'inchikey' => $chemProp->inchiKey,
-            'formula_source' => $chemProp->Formulae->source,
-            'formula_data' => $chemProp->Formulae->data,
+            'formula_source' => $formula_source,
+            'formula_data' => $formula_data,
             'definition' => is_string($chemProp->definition) ?
                 $chemProp->definition :
                 null,

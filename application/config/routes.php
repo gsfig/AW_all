@@ -56,9 +56,13 @@ $route['user/signup'] = 'login_controller/signup';
 $route['user/login'] = 'login_controller/login';
 $route['user/logout'] = 'login_controller/logout';
 
+$route['document/(:num)/annotation'] = 'document_controller/paperAnnotation/idNCBI/$1';
 $route['document'] = 'document_controller/document';
 //$route['document/(:num)'] = 'document_controller/document/id/$1';
-$route['document/annotation'] = 'document_controller/paper_annotation';
+//$route['document/annotation'] = 'document_controller/paper_annotation';
+
+
+
 $route['ibent_annotate'] = 'document_controller/free_text';
 
 // $route['document/(:num)/'] = 'document_controller/document_annotation/id/$1';

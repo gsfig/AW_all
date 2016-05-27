@@ -25,17 +25,30 @@ class Document_model extends CI_Model
 
     }
 
-    public function get_annotation($id)
-    {
-        include ('DBconfig.php');
-        $stmt = $db->prepare('SELECT PA.offset, PA.size, PA.P.idPaper,  FROM Paper P, PaperAnnotation PA WHERE P.idNCBI = :id');
-        $stmt->execute(['id' => $id]);
-        if ($stmt) {
-            $response = $stmt->fetch(PDO::FETCH_ASSOC);
-        } else {
-            $response = null;
+    public function getAnnotation($idAnnotation){
+        $query = $this->db->get_where('Annotation', array('idAnnotation' => $idAnnotation));
+        if ($query->num_rows() < 1){
+            return null;
         }
-        return $response;
+        return $query->result();
+
+    }
+
+    /*
+     * in: paper id
+     * from PaperAnnotations table
+     * returns: array of fkAnnotations for that paper
+     */
+    public function list_paper_annotation($idPaper)
+    {
+        $this->db->select('fkAnnotation');
+        $query = $this->db->get_where('PaperAnnotation', array('fkpaper' => $idPaper));
+
+        // TODO: esta sera forma de verificar resultado
+        if ($query->num_rows() < 1){
+            return null;
+        }
+        return $query->result();
     }
     public function post_document($idNCBI,$title,$abstract){
 
@@ -67,6 +80,7 @@ class Document_model extends CI_Model
         if(is_null($user)){
             $user = 1;
         }
+        
         $this->db->select('idPaper');
         $query = $this->db->get_where('Paper', array('idNCBI' => $idNCBI));
         $paperid  = $query->result();
@@ -86,16 +100,37 @@ class Document_model extends CI_Model
                 $chebi_id = $entity->chebi_id;
                 $this->db->select('idChemicalCompound');
                 $query = $this->db->get_where('ChemicalCompound', array('chebiid' => $chebi_id));
-                $result = $query->result();
 
-                echo "chem from annotation: "; print_r($chebi_id); echo "\n";
-                echo "chem from DB: "; print_r($result); echo "\n";
 
-                if(count($result) > 0){
+                if ($query->num_rows() > 0){
+                    $result = $query->result();
+//                    echo "post_paper_annotation, query select idChemCompound, numRows > 0: "; print_r($result); echo "\n";
                     $fkChem = (int)$result[0]->idChemicalCompound;
                 }
                 else{ // there is another chebiID not in the DB
 
+                    // chebi_id == 1, should be in DB
+
+
+                    $chemCompound = $this->getCompound($chebi_id);
+
+//                    if(!isset($chemCompound)){
+//                        echo "not set \n";
+//                        echo "chebi ID "; print_r($chebi_id); echo "\n";
+//                        echo "chemCompound from curl: "; print_r($chemCompound); echo "\n";
+//                        echo "fkChem from curl: "; print_r($fkChem); echo "\n";
+//                    }
+//                    echo "post_paper_annotation, entity: "; print_r($entity); echo "\n";
+
+//                    echo "post_paper_annotation, getCompound: "; print_r($chemCompound); echo "\n";
+
+
+                    $fkChem = $chemCompound->idChemicalCompound;
+
+
+
+//                    echo "fkChem from curl: "; print_r($fkChem); echo "\n";
+//                    die();
                     // TODO: add new chemical compound to DB and then get it $fkChem = ....
                     
 
@@ -186,6 +221,41 @@ class Document_model extends CI_Model
             return false;
         }
 
+    }
+
+    private function getCompound($chebi_id){
+        $this->load->model('Chemical_model');
+        $this->load->model('API_model');
+        $this->load->library('utilities');
+
+        $ChemProperties = $this->Chemical_model->getChemical($chebi_id);
+        if(count($ChemProperties) < 1){
+
+            $compound = $this->API_model->chebi_getcompleteentity_chebi($chebi_id);
+            $ChemFromChebi = $this->utilities->chebiToDB($compound);
+            $inserted = $this->Chemical_model->post_ChemicalDB($ChemFromChebi);
+
+            //get from DB
+            $ChemProperties = $this->Chemical_model->getChemical($chebi_id);
+            $chemName = $ChemProperties->chebiname;
+
+            $chemName = ucwords($chemName);
+
+            $url = $this->utilities->getUrlDbpedia($chemName);
+            $data = $this->cheminfo($url);
+
+            if(isset($data)){
+                $chemInfo = $this->utilities->chemInfo($data);
+                $this-> Chemical_model -> updateDbpedia($chebi_id, $chemInfo);
+                $ChemProperties = $this->Chemical_model->getChemical($chebi_id); // get chemical with Dbpedia info
+            }
+        }
+        return $ChemProperties;
+    }
+    private function cheminfo($url){
+        $this->load->model('Dbpedia_model');
+        $result =  json_decode($this->Dbpedia_model->request($url));
+        return $result;
     }
 
 

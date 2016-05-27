@@ -23,8 +23,7 @@ class Ibent_model extends CI_Model {
 		# Send request.
 		$result = curl_exec($curl);
 		curl_close($curl);
-			
-		
+
 		return $result;
 	}
 	
