@@ -3,7 +3,8 @@ var app = angular.module('awApp', [
     // 'ngRoute',
     'ngSanitize',
     'ui.router',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'nsPopover'
 ]);
 var baseurl = 'http://' + window.location.hostname + "/AW_all";
 app.constant('apiBaseUrl', baseurl);
