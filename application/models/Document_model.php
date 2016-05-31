@@ -98,8 +98,8 @@ class Document_model extends CI_Model
 
 //                $chebi_id = $entity['chebi_id']; // isto funcionava? talvez seja de estar a usar json temporário para nao ter de anotar??
                 $chebi_id = $entity->chebi_id;
-                $this->db->select('idChemicalCompound');
-                $query = $this->db->get_where('ChemicalCompound', array('chebiid' => $chebi_id));
+                $query = $this->getChemFK($chebi_id);
+
 
 
                 if ($query->num_rows() > 0){
@@ -210,6 +210,12 @@ class Document_model extends CI_Model
 
     }
 
+    public function getChemFK($chebi_id){
+        $this->db->select('idChemicalCompound');
+        return $this->db->get_where('ChemicalCompound', array('chebiid' => $chebi_id));
+
+    }
+
     private function insert($data,$tableName){
 
         $this->db->insert($tableName, $data);
@@ -223,7 +229,7 @@ class Document_model extends CI_Model
 
     }
 
-    private function getCompound($chebi_id){
+    public function getCompound($chebi_id){
         $this->load->model('Chemical_model');
         $this->load->model('API_model');
         $this->load->library('utilities');
