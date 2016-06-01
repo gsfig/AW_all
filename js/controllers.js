@@ -8,7 +8,8 @@ app.controller('DocumentJSController', ['apiBaseUrl',  '$timeout','$scope', '$ht
 
     var ranges = undefined;
     var mainRange = undefined;
-
+    $scope.annotationsInClick = undefined;
+    $scope.showButton = false;
     // WEBSERVICE to /document
     // document is available in $scope ( in the tags that have 'data-ng-controller="documentJSController')
     $http({
@@ -25,6 +26,7 @@ app.controller('DocumentJSController', ['apiBaseUrl',  '$timeout','$scope', '$ht
         $scope.title = title;
         $scope.abstract = abstract;
         $scope.showAbstDiv = true;
+        $scope.showButton = true;
         $scope.idNCBI = idNCBI;
         idPaperInView = idNCBI;
     };
@@ -70,7 +72,13 @@ app.controller('DocumentJSController', ['apiBaseUrl',  '$timeout','$scope', '$ht
             });
         }
     };
-    $scope.annotatePaper = function(id){
+    $scope.annotateDoc = function(idOrText){
+        // $scope.showButton = false;
+        isNaN(parseInt(idOrText)) ? annotateText(idOrText) : annotatePaper(idOrText);
+    };
+
+    function annotatePaper(id){
+        $scope.getPaper(id);
         if(angular.isUndefined(id)){
             console.error("Paper id is undefined")
         }
@@ -87,16 +95,23 @@ app.controller('DocumentJSController', ['apiBaseUrl',  '$timeout','$scope', '$ht
                 // headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
             }).then(function successCallback(response) {
                 $scope.ibent_annotation = response.data.payload;
-                console.log(ibent_annotation);
+                console.log($scope.ibent_annotation);
+                // $scope.dataChanged();
+                // $scope.showAbstract("Free text annotation", text, undefined);
+                $timeout(function(){
+                    $scope.$apply(function(){
+                        $scope.showAnnotations()
+                    })
+                });
             }, function errorCallback(response) {
+                console.error(response.data.message);
                 // called asynchronously if an error occurs
                 // or server returns response with an error status.
             });
-                        
+
         }
     };
-    $scope.annotateText = function(text){
-
+    function annotateText (text){
         $http({
             method: "post",
             url: apiBaseUrl + "/ibent_annotate",
@@ -115,11 +130,8 @@ app.controller('DocumentJSController', ['apiBaseUrl',  '$timeout','$scope', '$ht
                     $scope.showAnnotations()
                 })
             });
-
-
-
-
         }, function errorCallback(response) {
+            console.error(response.data.message);
             // called asynchronously if an error occurs
             // or server returns response with an error status.
         });
@@ -144,8 +156,8 @@ app.controller('DocumentJSController', ['apiBaseUrl',  '$timeout','$scope', '$ht
         // highlighter.addClassApplier(classApplier);
 
         angular.forEach($scope.ibent_annotation, function(annot){
-            var start = annot.offset;
-            var end = start + annot.size;
+            var start = parseInt(annot.offset);
+            var end = start + parseInt(annot.size);
 
             // highlighter.highlightCharacterRanges('annotatedText', [start, end])
 
@@ -156,7 +168,7 @@ app.controller('DocumentJSController', ['apiBaseUrl',  '$timeout','$scope', '$ht
 
             // see if its easy to remove range and re-highlight ranges
 
-            // console.log("start: "+start + " end: " + end + " text: " + annot.text);
+            console.log("start: "+start + " end: " + end + " text: " + annot.text);
             selectAndHighlightRange('annotatedText', start, end);
 
 
@@ -198,10 +210,9 @@ app.controller('DocumentJSController', ['apiBaseUrl',  '$timeout','$scope', '$ht
             // console.log("aqui");
             var range = selection.getRangeAt(0);
             var offsets = range.toCharacterRange(element);
-            console.log(offsets);
+            // console.log(offsets);
         }
-
-        // TODO: comparar com anotações e ver se bate com alguma. Se sim, apresentar chemical
+        $scope.popOver(offsets.start, offsets.end, selection.toString() );
 
 
         // selection.expand("character", {
@@ -250,23 +261,64 @@ app.controller('DocumentJSController', ['apiBaseUrl',  '$timeout','$scope', '$ht
     // };
 
     $scope.popOver = function(anchor1, anchor2, text){
+        $scope.annotationsInClick = [];
         angular.forEach($scope.ibent_annotation, function(annot){
-            var start = annot.offset;
-            var end = start + annot.size;
+            var start = parseInt(annot.offset);
+            var end = start + parseInt(annot.size);
+
+            if( anchor1 <= end && anchor2 >= start){
+                // $scope.annotationsInClick.push(
+                //     {
+                //         'text' : annot.text,
+                //         'fkChemicalCompound' : annot.fkChemicalCompound != 1 ? annot.fkChemicalCompound : 'no chebi compound found' ,
+                //         'chebi_score' : annot.chebi_score !=0 ? annot.chebi_score : null ,
+                //         'ssm_entity' : annot.ssm_entity != 0 ? annot.ssm_entity : null ,
+                //         'ssm_score' : annot.ssm_score != 0 ? annot.ssm_score : null ,
+                //         'type' : annot.type ,
+                //         'subtype' : annot.subtype
+                //     }
+                // );
+
+                // show chemical info
+
+
+                $scope.annotationsInClick.push(
+                    {
+                        'chem' : {
+                            'name' : annot.text,
+                            'fkChemicalCompound' : annot.fkChemicalCompound != 1 ? annot.fkChemicalCompound : 'no chebi compound found' ,
+                            'chebi_score' : annot.chebi_score !=0 ? annot.chebi_score : null ,
+                            'ssm_entity' : annot.ssm_entity != 0 ? annot.ssm_entity : null ,
+                            'ssm_score' : annot.ssm_score != 0 ? annot.ssm_score : null ,
+                            'type' : annot.type ,
+                            'subtype' : annot.subtype
+                        },
+                        'content' : {
+                            'operation 1' : 'op1',
+                            'operation 2' : 'op2'
+
+                        }
+
+                    }
+                );
+            }
+            else{
+                // else if selection bigger than click, add new compound?
+
+
+
+            }
+            // TODO: change span of annotation
 
 
         });
-
-
     };
 
-    $scope.items = [{
-        name: "Action"
-    }, {
-        name: "Another action"
-    }, {
-        name: "Something else here"
-    }];
+    $scope.showChemicalDetails = function(annotationInClick){
+        $scope.chemDetails = annotationInClick;
+    };
+
+
 
 
 
@@ -450,28 +502,6 @@ app.controller('DocumentJSController', ['apiBaseUrl',  '$timeout','$scope', '$ht
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    $scope.changeState = function(){
-        $state.transitionTo('compound');
-
-
-    }
 
 
 }]); //end documentJSController

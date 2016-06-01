@@ -17,7 +17,7 @@ class Login_model extends CI_Model
             'password' => $password,
             'token' => $token
         );
-        $this->db->insert('Users', $data);
+        $this->db->insert('users', $data);
         if($this->db->affected_rows() > 0)
         {
             return true;
@@ -28,7 +28,7 @@ class Login_model extends CI_Model
     }
 
     public function getUser($username,$password ){
-        $query = $this->db->get_where('Users', array('username' => $username, 'password' => $password));
+        $query = $this->db->get_where('users', array('username' => $username, 'password' => $password));
         $result = $query->result();
         return $result;
     }
@@ -42,7 +42,7 @@ class Login_model extends CI_Model
         $array = array('username' => $username);
 
         $this->db->where($array);
-        $this->db->update('Users', $data);
+        $this->db->update('users', $data);
         if($this->db->affected_rows() > 0)
         {
             return true;

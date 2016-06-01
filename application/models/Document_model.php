@@ -11,7 +11,7 @@ class Document_model extends CI_Model
     public function get_all_documents()
     {
 
-        $query = $this->db->get('Paper');
+        $query = $this->db->get('paper');
         $result = $query->result();
         return $result;
     }
@@ -19,14 +19,16 @@ class Document_model extends CI_Model
     {
         // 17284678, 11748933
 
-        $query = $this->db->get_where('Paper', array('idNCBI' => $id));
-        $result = $query->result();
-        return $result;
+        $query = $this->db->get_where('paper', array('idNCBI' => $id));
+        if ($query->num_rows() < 1){
+            return null;
+        }
+        return $query->result();
 
     }
 
-    public function getAnnotation($idAnnotation){
-        $query = $this->db->get_where('Annotation', array('idAnnotation' => $idAnnotation));
+    public function getannotation($idannotation){
+        $query = $this->db->get_where('annotation', array('idannotation' => $idannotation));
         if ($query->num_rows() < 1){
             return null;
         }
@@ -36,13 +38,13 @@ class Document_model extends CI_Model
 
     /*
      * in: paper id
-     * from PaperAnnotations table
-     * returns: array of fkAnnotations for that paper
+     * from paperannotations table
+     * returns: array of fkannotations for that paper
      */
-    public function list_paper_annotation($idPaper)
+    public function list_paper_annotation($idpaper)
     {
-        $this->db->select('fkAnnotation');
-        $query = $this->db->get_where('PaperAnnotation', array('fkpaper' => $idPaper));
+        $this->db->select('fkannotation');
+        $query = $this->db->get_where('paperannotation', array('fkpaper' => $idpaper));
 
         // TODO: esta sera forma de verificar resultado
         if ($query->num_rows() < 1){
@@ -57,7 +59,7 @@ class Document_model extends CI_Model
                 'title' => $title,
                 'abstract' => $abstract
         );
-        $this->db->insert('Paper', $data);
+        $this->db->insert('paper', $data);
         if($this->db->affected_rows() > 0)
         {
             return true;
@@ -81,12 +83,12 @@ class Document_model extends CI_Model
             $user = 1;
         }
         
-        $this->db->select('idPaper');
-        $query = $this->db->get_where('Paper', array('idNCBI' => $idNCBI));
+        $this->db->select('idpaper');
+        $query = $this->db->get_where('paper', array('idNCBI' => $idNCBI));
         $paperid  = $query->result();
 
         if(count($paperid) > 0){
-            $paperid = (int)$paperid[0]->idPaper;
+            $paperid = (int)$paperid[0]->idpaper;
         }
         else{
             // paper not found in DB, get it
@@ -94,7 +96,7 @@ class Document_model extends CI_Model
 
         foreach ($annotation->abstract->sentences as $sentence){
             foreach ($sentence->entities as $entity){
-                // get fkChemicalCompound if not exist => 1 (DB has this)
+                // get fkchemicalcompound if not exist => 1 (DB has this)
 
 //                $chebi_id = $entity['chebi_id']; // isto funcionava? talvez seja de estar a usar json temporário para nao ter de anotar??
                 $chebi_id = $entity->chebi_id;
@@ -105,7 +107,7 @@ class Document_model extends CI_Model
                 if ($query->num_rows() > 0){
                     $result = $query->result();
 //                    echo "post_paper_annotation, query select idChemCompound, numRows > 0: "; print_r($result); echo "\n";
-                    $fkChem = (int)$result[0]->idChemicalCompound;
+                    $fkChem = (int)$result[0]->idchemicalcompound;
                 }
                 else{ // there is another chebiID not in the DB
 
@@ -125,7 +127,7 @@ class Document_model extends CI_Model
 //                    echo "post_paper_annotation, getCompound: "; print_r($chemCompound); echo "\n";
 
 
-                    $fkChem = $chemCompound->idChemicalCompound;
+                    $fkChem = $chemCompound->idchemicalcompound;
 
 
 
@@ -141,7 +143,7 @@ class Document_model extends CI_Model
                     // dava com ['text'] em vez de ->text
                     'text' => $entity->text,
                     'ssm_score' => $entity->ssm_score,
-                    'fkChemicalCompound' => $fkChem,
+                    'fkchemicalcompound' => $fkChem,
                     'subtype' => $entity->subtype,
                     'chebi_score' => $entity->chebi_score,
                     'ssm_entity' => (int)$entity->ssm_entity,
@@ -151,42 +153,42 @@ class Document_model extends CI_Model
                 );
 
                 // if data already exists in DB doesnt insert
-                $rowExists = $this->value_exists('Annotation', $data);
+                $rowExists = $this->value_exists('annotation', $data);
 //                if(!is_null($rowExists[0])){
                 if(count($rowExists) > 0){
-                    $idAnnotationInserted = (int)$rowExists[0]->idAnnotation;
+                    $idannotationInserted = (int)$rowExists[0]->idannotation;
                 }
                 else{
-                    $idAnnotationInserted = $this->insert($data, 'Annotation');
+                    $idannotationInserted = $this->insert($data, 'annotation');
                 }
-                $PaperAnnotation = array(
+                $paperannotation = array(
                     'fkpaper' => $paperid,
                     'fkuser' => $user,
-                    'fkAnnotation' => $idAnnotationInserted
+                    'fkannotation' => $idannotationInserted
                 );
-                $rowExists = $this->value_exists('PaperAnnotation', $PaperAnnotation);
+                $rowExists = $this->value_exists('paperannotation', $paperannotation);
                 if(count($rowExists) > 0){
-                    $idPaperAnnotationInserted = (int)$rowExists[0]->idPaperAnnotation;
+                    $idpaperannotationInserted = (int)$rowExists[0]->idpaperannotation;
                 }
                 else{
-                    $idPaperAnnotationInserted = $this->insert($PaperAnnotation, 'PaperAnnotation');
+                    $idpaperannotationInserted = $this->insert($paperannotation, 'paperannotation');
                 }
             }
         }
 
 
         // POSTMAN
-        // get fkChemicalCompound if not exist => 1 (database does this)
+        // get fkchemicalcompound if not exist => 1 (database does this)
 //        $chebi_id = $this->getinput($annotation, 'chebi_id');
-//        $this->db->select('idChemicalCompound');
-//        $query = $this->db->get_where('ChemicalCompound', array('chebiid' => $chebi_id));
+//        $this->db->select('idchemicalcompound');
+//        $query = $this->db->get_where('chemicalcompound', array('chebiid' => $chebi_id));
 //        $fkChibi = $query->result();
 //        }
 
 //        $data = array(
 //                    'text' => $this->getinput($annotation, 'text'),
 //                    'ssm_score' => $this->getinput($annotation, 'ssm_score'),
-//                    'fkChemicalCompound' => (int)$fkChibi[0]->idChemicalCompound,
+//                    'fkchemicalcompound' => (int)$fkChibi[0]->idchemicalcompound,
 //                    'subtype' => $this->getinput($annotation, 'subtype'),
 //                    'chebi_score' => $this->getinput($annotation, 'chebi_score'),
 //                    'ssm_entity' => $this->getinput($annotation, 'ssm_entity'),
@@ -211,8 +213,8 @@ class Document_model extends CI_Model
     }
 
     public function getChemFK($chebi_id){
-        $this->db->select('idChemicalCompound');
-        return $this->db->get_where('ChemicalCompound', array('chebiid' => $chebi_id));
+        $this->db->select('idchemicalcompound');
+        return $this->db->get_where('chemicalcompound', array('chebiid' => $chebi_id));
 
     }
 

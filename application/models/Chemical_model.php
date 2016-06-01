@@ -6,9 +6,9 @@ class Chemical_model extends CI_Model
     public function post_chemical_compound($ChemProperties){
         // can be array or not:
         // Chemical structures,
-        // IupacNames
-        // Synonyms
-        // RegistryNumbers
+        // iupacNames
+        // synonyms
+        // registryNumbers
 
 
         
@@ -16,11 +16,11 @@ class Chemical_model extends CI_Model
 
     }
     public function getChemicalByName($name){
-        $query = $this->db->get_where('ChemicalCompound', array('chebiname' => $name));
+        $query = $this->db->get_where('chemicalcompound', array('chebiname' => $name));
         $array = $query->result();
 
         if(empty($array)){
-            $query = $this->db->get_where('Synonym', array('name' => $name));
+            $query = $this->db->get_where('synonym', array('name' => $name));
             $synonyms = $query->result();
         }
         if(empty($synonyms)){
@@ -31,7 +31,7 @@ class Chemical_model extends CI_Model
 
     public function getChemical($chebi_id){
 
-        $query = $this->db->get_where('ChemicalCompound', array('chebiid' => $chebi_id));
+        $query = $this->db->get_where('chemicalcompound', array('chebiid' => $chebi_id));
         $array = $query->result();
 
 //        print_r($array[0]);
@@ -39,8 +39,8 @@ class Chemical_model extends CI_Model
             return $array;
         }
 
-        $chemid = $array[0]->idChemicalCompound;
-        $query = $this->db->get_where('Iupac', array('fkchemcomp' => $chemid));
+        $chemid = $array[0]->idchemicalcompound;
+        $query = $this->db->get_where('iupac', array('fkchemcomp' => $chemid));
         $iupac = $query->result();
 
         if(!empty($iupac)){
@@ -48,7 +48,7 @@ class Chemical_model extends CI_Model
             $array[0]->iupacType = $iupac[0]->iupacType;
         }
 
-        $query = $this->db->get_where('Synonym', array('fkchemcomp' => $chemid));
+        $query = $this->db->get_where('synonym', array('fkchemcomp' => $chemid));
         $synonyms = $query->result();
 
         if(!empty($synonyms)){
@@ -63,7 +63,7 @@ class Chemical_model extends CI_Model
             $array[0]->synonyms = $synonymArray;
         }
 
-        $query = $this->db->get_where('Registry', array('fkchemcomp' => $chemid));
+        $query = $this->db->get_where('registry', array('fkchemcomp' => $chemid));
         $registry = $query->result();
 
         if(!empty($registry)){
@@ -187,81 +187,81 @@ class Chemical_model extends CI_Model
 //        print_r($data);
 //        echo "\n";
 
-        $this->db->insert('ChemicalCompound', $data);
+        $this->db->insert('chemicalcompound', $data);
         $rows = $this->db->affected_rows();
         if($rows > 0){
-            $this->db->select('idChemicalCompound');
-            $query = $this->db->get_where('ChemicalCompound', array('chebiid' => $chebiid));
+            $this->db->select('idchemicalcompound');
+            $query = $this->db->get_where('chemicalcompound', array('chebiid' => $chebiid));
             $result = $query->result();
-            $fkChem = (int)$result[0]->idChemicalCompound;
+            $fkChem = (int)$result[0]->idchemicalcompound;
 
             // After insert chemical, iupac
-            if(is_null($chemProp->IupacNames)){} // dont insert
+            if(is_null($chemProp->iupacNames)){} // dont insert
 
-            else if(is_array($chemProp->IupacNames)){
-                foreach ($chemProp->IupacNames as $iupac){
+            else if(is_array($chemProp->iupacNames)){
+                foreach ($chemProp->iupacNames as $iupac){
                     $data = array(
                         'name' => $iupac->data,
                         'fkchemcomp' => $fkChem,
                         'iupacType' => $iupac->type
                     );
-                    $this->db->insert('Iupac', $data);
+                    $this->db->insert('iupac', $data);
                 }
 
             }
-            else if(!is_null($chemProp->IupacNames)) {  // only one iupac
+            else if(!is_null($chemProp->iupacNames)) {  // only one iupac
                 $data = array(
-                    'name' => $chemProp->IupacNames->data,
+                    'name' => $chemProp->iupacNames->data,
                     'fkchemcomp' => $fkChem,
-                    'iupacType' => $chemProp->IupacNames->type
+                    'iupacType' => $chemProp->iupacNames->type
                 );
-                $this->db->insert('Iupac', $data);
+                $this->db->insert('iupac', $data);
             }
 
             // after insert chemical, synonyms
-            if(is_null($chemProp->Synonyms)){} // dont insert
+            if(is_null($chemProp->synonyms)){} // dont insert
 
-            else if(is_array($chemProp->Synonyms)){
-                foreach ($chemProp->Synonyms as $synonym){
+            else if(is_array($chemProp->synonyms)){
+                foreach ($chemProp->synonyms as $synonym){
                     $data = array(
                         'name' => $synonym->data,
                         'fkchemcomp' => $fkChem,
                         'source' => $synonym->source
                     );
-                    $this->db->insert('Synonym', $data);
+                    $this->db->insert('synonym', $data);
                 }
             }
-            else if(!is_null($chemProp->Synonyms)) {  // only one synonym
+            else if(!is_null($chemProp->synonyms)) {  // only one synonym
                 $data = array(
-                    'name' => $chemProp->Synonyms->data,
+                    'name' => $chemProp->synonyms->data,
                     'fkchemcomp' => $fkChem,
-                    'source' => $chemProp->Synonyms->source
+                    'source' => $chemProp->synonyms->source
                 );
-                $this->db->insert('Synonym', $data);
+                $this->db->insert('synonym', $data);
             }
 
             // after insert chemical, registry numbers
-            if(is_null($chemProp->RegistryNumbers)){} // dont insert
+            if(is_null($chemProp->registryNumbers)){} // dont insert
 
-            else if(is_array($chemProp->RegistryNumbers)){
-                foreach ($chemProp->RegistryNumbers as $registry){
+            else if(is_array($chemProp->registryNumbers)){
+                foreach ($chemProp->registryNumbers as $registry){
                     $data = array(
                         'nregistry' => (int)$registry->data,
                         'fkchemcomp' => $fkChem,
                         'type' => $registry->type,
                         'source' => $registry->source
                     );
-                    $this->db->insert('Registry', $data);
+                    $this->db->insert('registry', $data);
                 }
             }
-            else if(!is_null($chemProp->RegistryNumbers)) {  // only one synonym
+            else if(!is_null($chemProp->registryNumbers)) {  // only one synonym
                 $data = array(
-                    'nregistry' => (int)$chemProp->RegistryNumbers->data,
+                    'nregistry' => (int)$chemProp->registryNumbers->data,
                     'fkchemcomp' => $fkChem,
-                    'type' => $chemProp->RegistryNumbers->type,
-                    'source' => $chemProp->RegistryNumbers->source
+                    'type' => $chemProp->registryNumbers->type,
+                    'source' => $chemProp->registryNumbers->source
                 );
-                $this->db->insert('Registry', $data);
+                $this->db->insert('registry', $data);
             }
 
         }
@@ -270,7 +270,7 @@ class Chemical_model extends CI_Model
 
     public function updateDbpedia($chebi_id, $data){
         $this->db->where('chebiid', $chebi_id);
-        $this->db->update('ChemicalCompound', $data);
+        $this->db->update('chemicalcompound', $data);
     }
 
 }
