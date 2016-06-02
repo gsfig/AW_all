@@ -225,12 +225,12 @@ class Document_controller extends REST_Controller
                 if ($query->num_rows() > 0){
                     $result = $query->result();
 //                    echo "post_paper_annotation, query select idChemCompound, numRows > 0: "; print_r($result); echo "\n";
-                    $fkChem = (int)$result[0]->idChemicalCompound;
+                    $fkChem = (int)$result[0]->idchemicalcompound;
                 }
                 else { // there is another chebiID not in the DB
 
                     $chemCompound = $this->Document_model->getCompound($chebi_id);
-                    $fkChem = $chemCompound->idChemicalCompound;
+                    $fkChem = $chemCompound->idchemicalcompound;
                 }
                 $data = array(
                     // dava com ['text'] em vez de ->text

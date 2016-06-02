@@ -121,12 +121,12 @@ app.controller('DocumentJSController', ['apiBaseUrl',  '$timeout','$scope', '$ht
             headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
         }).then(function successCallback(response) {
             $scope.ibent_annotation = response.data.payload;
-
             console.log($scope.ibent_annotation);
             $scope.dataChanged();
             $scope.showAbstract("Free text annotation", text, undefined);
             $timeout(function(){
                 $scope.$apply(function(){
+
                     $scope.showAnnotations()
                 })
             });
@@ -294,8 +294,9 @@ app.controller('DocumentJSController', ['apiBaseUrl',  '$timeout','$scope', '$ht
                             'subtype' : annot.subtype
                         },
                         'content' : {
-                            'operation 1' : 'op1',
-                            'operation 2' : 'op2'
+                            'operation 1' : 'delete',
+                            'operation 2' : 'change span',
+                            'operation 3' : 'other operations',
 
                         }
 
@@ -470,6 +471,7 @@ app.controller('DocumentJSController', ['apiBaseUrl',  '$timeout','$scope', '$ht
             sel.addRange(range);
         }
         // Use HiliteColor since some browsers apply BackColor to the whole block
+        document.execCommand("styleWithCSS", true, null);
         if (!document.execCommand("HiliteColor", false, colour)) {
             document.execCommand("BackColor", false, colour);
         }

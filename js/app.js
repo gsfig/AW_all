@@ -24,6 +24,16 @@ app.config( function($stateProvider, $urlRouterProvider) {
                 // 'query@home' : {templateUrl: "partials/queryNCBI.html"}
             }
         })
+        // .state('home.annotation', {
+        //     url: '/annotation',
+        //     parent : 'home',
+        //     views: {
+        //         '' : {templateUrl: 'partials/annotation.html'},
+        //         'header@annotation' : {templateUrl: 'partials/headerSec.html', controller: 'NavBarController'},
+        //         'annotated@annotation' : {templateUrl: "partials/AnnotatedText.html", controller: 'DocumentJSController'},
+        //         'chemicalid@annotation' : {templateUrl: "partials/ChemicalIDforAnnotations.html", controller: 'ComponentController'}
+        //     }
+        // })
 
         .state('compound', {
             url: '/compound',
@@ -35,7 +45,13 @@ app.config( function($stateProvider, $urlRouterProvider) {
                 // 'compoundPathway@compound' : {templateUrl: "partials/compoundPathway.html"},
                 // 'compoundOntology@compound' : {templateUrl: "partials/compoundOntology.html"}
             }
-        });
+        })
+
+
+
+
+
+    ;
 
 });
 

@@ -1,0 +1,22 @@
+<div>
+
+    <nav class="navbar navbar-default" >
+			  <div class="container-fluid">
+				<div class="navbar-header">
+				  <a class="navbar-brand" href="#">
+					<img alt="simbol2.png" src="assets/images/simbol2.png">
+				  </a>
+				</div>
+				<br>
+				<br> 
+				<br>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a ng-show= useractive()>{{username}}</a></li>
+                <li><a ng-show= !useractive() ng-click= open()>Login / Sign Up</a></li>
+                <li><a ng-show=useractive() ng-click = logout()>Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+
+</div>
