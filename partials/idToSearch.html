@@ -1,0 +1,29 @@
+<!--CHEBI ID-->
+
+
+<div class="row.pull-left">
+  <div class="col-sm-6 col-md-4">
+    <div class="thumbnail">
+        <br>
+        <br>
+            <img src="assets/images/compound.png" alt="compound.png">
+            <div class="caption" Left>
+                <br>
+                <p>With CHEBI ID, find information about the properties, ontologies and pathways of the chemical compound.</p>
+                <br>
+                <br>
+                <form class="navbar-form navbar-right" role="search">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                        <input name="id" type="text" class="form-control" data-ng-model="chebiID" placeholder= "Insert CHEBI ID here">
+                    </div>
+                    <button ui-sref="compound" data-ng-click="setChemToSearch(chebiID)">Search</button>
+                </form>
+            <br>   
+            <br>
+            <br>
+            </div>
+
+        </div>
+    </div>
+</div>

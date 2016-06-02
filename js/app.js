@@ -20,20 +20,21 @@ app.config( function($stateProvider, $urlRouterProvider) {
                 '' : {templateUrl: 'partials/home.html'},
                 'header@home' : {templateUrl: 'partials/header.html', controller: 'NavBarController'},
                 'title@home' : {templateUrl: 'partials/idToAnnotate.html', controller: 'DocumentJSController'},
+                'compound@home' : {templateUrl: 'partials/idToSearch.html', controller: 'ComponentController'},
+                'user@home' : {templateUrl: 'partials/userToLogin.html', controller: 'NavBarController'},
+
                 // 'relatedPaper@home' : {templateUrl: "partials/NCBIrelatedPapers.html"},
                 // 'query@home' : {templateUrl: "partials/queryNCBI.html"}
             }
         })
-        // .state('home.annotation', {
-        //     url: '/annotation',
-        //     parent : 'home',
-        //     views: {
-        //         '' : {templateUrl: 'partials/annotation.html'},
-        //         'header@annotation' : {templateUrl: 'partials/headerSec.html', controller: 'NavBarController'},
-        //         'annotated@annotation' : {templateUrl: "partials/AnnotatedText.html", controller: 'DocumentJSController'},
-        //         'chemicalid@annotation' : {templateUrl: "partials/ChemicalIDforAnnotations.html", controller: 'ComponentController'}
-        //     }
-        // })
+        .state('annotation', {
+            url: '/annotation',
+            views: {
+                '' : {templateUrl: 'partials/annotation.html'},
+                'header@annotation' : {templateUrl: 'partials/headerSec.html', controller: 'NavBarController'},
+                'annotated@annotation' : {templateUrl: "partials/AnnotatedText.html", controller: 'AbstractController'}
+            }
+        })
 
         .state('compound', {
             url: '/compound',
@@ -44,6 +45,16 @@ app.config( function($stateProvider, $urlRouterProvider) {
                 // 'compoundMain@compound' : {templateUrl: "partials/compoundMain.html", controller: 'ComponentController'},
                 // 'compoundPathway@compound' : {templateUrl: "partials/compoundPathway.html"},
                 // 'compoundOntology@compound' : {templateUrl: "partials/compoundOntology.html"}
+            }
+        })
+        .state('user', {
+            url: '/user',
+            views: {
+                '' : {templateUrl: 'partials/user.html'},
+                'header@user' : {templateUrl: 'partials/headerSec.html', controller: 'NavBarController'},
+                'page@user' : {templateUrl: "partials/userPage.html", controller: 'UserController'},
+                'd3@user' : {templateUrl: "partials/d3User.html"},
+
             }
         })
 

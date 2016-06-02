@@ -1,88 +1,195 @@
+<!--To search a new compound-->
+
+<!--<form class="navbar-form navbar-right" role="search">-->
+    <!--<div class="input-group">-->
+        <!--<span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>-->
+        <!--<input type="text" class="form-control" placeholder="Insert ChEBI ID here">-->
+    <!--</div>-->
+    <!--<button type="submit" ui-sref="compound" class="btn btn-default">Search</button>-->
+<!--</form>-->
+<!--<br>-->
+
+
+<!-- Compound-->
+<!--header-->
+
+
+<div class="page-header">
+    <h2>Chemical Compound: <small>CHEBI ID {{chebi.chebiid}}</small></h2>
+</div>
+
+
+<!--TODO: alterar nome de variaveis que espera, testar arrays -->
+<!--para retirar depois-->
+
 <div>
-
-     <!--TODO: alterar nome de variaveis que espera, testar arrays -->
-
     <form >
         <textarea name="id" data-ng-model="chebiID"placeholder="Chebi ID"></textarea>
         <button data-ng-click="getChebi(chebiID)">submit compound</button>
     </form>
+</div>
 
 
-    <div itemscope="itemscope" itemtype="http://www.axeleratio.com/voc/chemid">
+<!-- Separador Main-->
 
-<!--CHEBI ID-->
-         <li >
-            <span itemprop="ChEBI"> Chebi ID: {{chebi.chebiid}} </span> <br/>
-        </li  >
 
-<!--CHEBI ASCII-->
-        <li >
-            <span  itemprop="CompName" >Chebi Ascii: {{chebi.chebiname}} </span> <br/>
-        </li  >
-<!--FORMULAE-->
-        <li >
-            <span itemprop="Formula"> Formulae: {{chebi.formula_source}}  |   {{chebi.formula_data}} </span> <br/>
-        </li  >
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <label class="panel-title">Main Information</label>
+    </div>
 
-<!--CHEMICAL STRUCTURES-->
-        <li >
-            2D Chemical Structure <br/>
-            Type: {{chebi.twoD_type}} <br/>
-            Structure: {{chebi.twoD}} <br/>
-        </li  >
-        <li >
-            3D Chemical Structure <br/>
-            Type: {{chebi.threeD_type}} <br/>
-            Structure: {{chebi.threeD}} <br/>
-        </li  >
 
-<!--IUPAC NAMES-->
-        <li >
-            Iupac type: {{chebi.iupacType}}<br/>
-            Iupac name: {{chebi.iupacName}}<br/>
-        </li  >
+    <div class="panel-title">
+        <br>
+        <label for="comment">Chemical Compound ID</label>
+        <br>
+        <br>
+    </div>
+    <div class="container">
+        <table class="table table-striped">
+            <tbody>
+            <tr>
+                <th>ChEBI ID</th>
+                <td>{{chebi.chebiid}}</td>
+            </tr>
+            <tr>
+                <th>ChEBI Name</th>
+                <td>{{chebi.chebiname}}</td>
+            </tr>
+            <tr>
+                <th>Formula</th>
+                <td>{{chebi.formula_data}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-<!--INCHI-->
-        <li >
-            <span itemprop="InChI"> Inchy: {{chebi.inchi}}</span> <br/>
-            <span itemprop="InChI"> Inchi Key: {{chebi.inchiKey}}</span> <br/>
-        </li  >
+    <div class="panel-title">
+        <br>
+        <label for="comment">Names and Identifiers</label>
+        <br>
+        <br>
+    </div>
+    <div class="container">
+        <table class="table table-striped">
+            <tbody>
+            <tr>
+                <th>IUPAC Names</th>
+                <td>{{chebi.iupacName}}</td>
+            </tr>
+            <tr>
+                <th>Inchy</th>
+                <td>{{chebi.inchi}}</td>
+            </tr>
+            <tr>
+                <th>Inchi Key</th>
+                <td>{{chebi.inchikey}}</td>
+            </tr>
+            <tr>
+                <th>SMILES</th>
+                <td>{{chebi.smiles }}</td>
+            </tr>
+            <tr>
+                <th>Synonym</th>
+                <td>
+                    <div ng-if="testForArray(chebi.synonyms)">
+                        <li ng-repeat=" item in chebi.synonyms" >
+                            <span itemprop="TrivialName"> {{item.source}} | {{item.name}} </span> <br/>
+                        </li  >
+                    </div>
+                    <div ng-if="!testForArray(chebi.synonyms)">
+                        <li >
+                            <span itemprop="TrivialName"> Synonym: {{chebi.synonyms.source}} | {{chebi.synonyms.name}}</span> <br/>
+                        </li  >
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="panel-title">
+        <br>
+        <label for="comment">Properties</label>
+        <br>
+        <br>
+    </div>
+    <div class="container">
+        <table class="table table-striped">
+            <tbody>
+            <tr>
+                <th>Molecular Weight</th>
+                <td>{{chebi.molecularWeight}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="panel-title">
+        <br>
+        <label for="comment">Other Information</label>
+        <br>
+        <br>
+    </div>
+    <div class="container">
+        <table class="table table-striped">
+            <tbody>
+            <tr>
+                <th>Registry Number</th>
+                <td>
+                    <div ng-if="testForArray(chebi.registry)">
+                        <li ng-repeat=" item in chebi.registry">
+                            Source: {{item.source}},
+                            Type: {{item.type}},
+                            Number: {{item.nregistry}}
 
-<!--SYNONYMS-->
-        <div ng-if="testForArray(chebi.synonyms)">
-            Synonyms:
-            <li ng-repeat=" item in chebi.synonyms" >
-                <span itemprop="TrivialName"> {{item.source}} | {{item.name}} </span> <br/>
-            </li  >
-        </div>
-        <div ng-if="!testForArray(chebi.synonyms)">
-            <li >
-                <span itemprop="TrivialName"> Synonym: {{chebi.synonyms.source}} | {{chebi.synonyms.name}}</span> <br/>
-            </li  >
-        </div>
-
-<!--Registry numbers-->
-        <div ng-if="testForArray(chebi.registry)">
-            Registry numbers:
-            <li ng-repeat=" item in chebi.registry">
-                Source: {{item.source}} <br>
-                Type: {{item.type}}<br>
-                Number: {{item.nregistry}}<br>
-
-            </li  >
-        </div>
-        <div ng-if="!testForArray(chebi.registry)">
-            <li >
-                Registry numbers:
-                Source: {{chebi.registry.source}} <br>
-                Type: {{chebi.registry.type}}<br>
-                Number: {{chebi.registry.nregistry}}<br>
-            </li  >
-        </div>
-
-<!--From DBpedia-->
-        <span itemprop= "SMILES"> smiles: {{chebi.smiles }}</span><br>
-        <span> Molecular weigth: {{chebi.molecularWeight}}</span><br>
-        <span itemprop= "PubChem"> PubChem: {{chebi.pubchem }}</span><br>
+                        </li  >
+                    </div>
+                    <div ng-if="!testForArray(chebi.registry)">
+                        <li >
+                            Source: {{chebi.registry.source}},
+                            Type: {{chebi.registry.type}},
+                            Number: {{chebi.registry.nregistry}}
+                        </li  >
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>PubChem Reference</th>
+                <td>{{chebi.pubchem }}</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
+
+
+
+
+<!-- Separador Ontology-->
+
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <label class="panel-title">Ontology</label>
+    </div>
+    <div class="panel-body">
+        Panel content
+        ????
+    </div>
+</div>
+
+
+
+
+<!-- Separador Pathway-->
+
+
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <label class="panel-title">Pathways</label>
+    </div>
+    <div class="panel-body">
+        Panel content
+        ???
+    </div>
+</div>
+
+

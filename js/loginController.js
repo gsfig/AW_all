@@ -49,5 +49,6 @@ app.controller('LoginController',['$scope','$http','$uibModalInstance', 'apiBase
             // or server returns response with an error status.
             console.error(error);
         });
+
     }
 }]); //end NavBarController

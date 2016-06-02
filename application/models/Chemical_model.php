@@ -196,10 +196,11 @@ class Chemical_model extends CI_Model
             $fkChem = (int)$result[0]->idchemicalcompound;
 
             // After insert chemical, iupac
-            if(is_null($chemProp->iupacNames)){} // dont insert
 
-            else if(is_array($chemProp->iupacNames)){
-                foreach ($chemProp->iupacNames as $iupac){
+            if(is_null($chemProp->IupacNames)){} // dont insert
+
+            else if(is_array($chemProp->IupacNames)){
+                foreach ($chemProp->IupacNames as $iupac){
                     $data = array(
                         'name' => $iupac->data,
                         'fkchemcomp' => $fkChem,
@@ -209,20 +210,20 @@ class Chemical_model extends CI_Model
                 }
 
             }
-            else if(!is_null($chemProp->iupacNames)) {  // only one iupac
+            else if(!is_null($chemProp->IupacNames)) {  // only one iupac
                 $data = array(
-                    'name' => $chemProp->iupacNames->data,
+                    'name' => $chemProp->IupacNames->data,
                     'fkchemcomp' => $fkChem,
-                    'iupacType' => $chemProp->iupacNames->type
+                    'iupacType' => $chemProp->IupacNames->type
                 );
                 $this->db->insert('iupac', $data);
             }
 
             // after insert chemical, synonyms
-            if(is_null($chemProp->synonyms)){} // dont insert
+            if(is_null($chemProp->Synonyms)){} // dont insert
 
-            else if(is_array($chemProp->synonyms)){
-                foreach ($chemProp->synonyms as $synonym){
+            else if(is_array($chemProp->Synonyms)){
+                foreach ($chemProp->Synonyms as $synonym){
                     $data = array(
                         'name' => $synonym->data,
                         'fkchemcomp' => $fkChem,
@@ -231,20 +232,20 @@ class Chemical_model extends CI_Model
                     $this->db->insert('synonym', $data);
                 }
             }
-            else if(!is_null($chemProp->synonyms)) {  // only one synonym
+            else if(!is_null($chemProp->Synonyms)) {  // only one synonym
                 $data = array(
-                    'name' => $chemProp->synonyms->data,
+                    'name' => $chemProp->Synonyms->data,
                     'fkchemcomp' => $fkChem,
-                    'source' => $chemProp->synonyms->source
+                    'source' => $chemProp->Synonyms->source
                 );
                 $this->db->insert('synonym', $data);
             }
 
             // after insert chemical, registry numbers
-            if(is_null($chemProp->registryNumbers)){} // dont insert
+            if(is_null($chemProp->RegistryNumbers)){} // dont insert
 
-            else if(is_array($chemProp->registryNumbers)){
-                foreach ($chemProp->registryNumbers as $registry){
+            else if(is_array($chemProp->RegistryNumbers)){
+                foreach ($chemProp->RegistryNumbers as $registry){
                     $data = array(
                         'nregistry' => (int)$registry->data,
                         'fkchemcomp' => $fkChem,
@@ -254,12 +255,12 @@ class Chemical_model extends CI_Model
                     $this->db->insert('registry', $data);
                 }
             }
-            else if(!is_null($chemProp->registryNumbers)) {  // only one synonym
+            else if(!is_null($chemProp->RegistryNumbers)) {  // only one synonym
                 $data = array(
-                    'nregistry' => (int)$chemProp->registryNumbers->data,
+                    'nregistry' => (int)$chemProp->RegistryNumbers->data,
                     'fkchemcomp' => $fkChem,
-                    'type' => $chemProp->registryNumbers->type,
-                    'source' => $chemProp->registryNumbers->source
+                    'type' => $chemProp->RegistryNumbers->type,
+                    'source' => $chemProp->RegistryNumbers->source
                 );
                 $this->db->insert('registry', $data);
             }

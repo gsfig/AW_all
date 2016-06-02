@@ -1,19 +1,30 @@
 <div>
-
     <!--IBEnt-->
-    <form >
-        <textarea class="well" data-ng-model="toAnnotate" data-ng-change="dataChanged()" placeholder= "Input text or NCBI id to annotate"></textarea>
-        <button data-ng-click="annotateDoc(toAnnotate)">Submit</button>
-    </form>
-    <ul>
-
+    <div class="row.pull-left">
+        <div class="col-sm-6 col-md-4">
+            <div class="thumbnail">
+                <br>
+                <br>
+                <img src="assets/images/anotate.png" alt="anotate.png">
+                <div class="caption" Left>
+                    <br>
+                    <p>Here it is possible to annotate chemical compounds from NCBI Identifier scientific articles. If you want to annotate chemical compounds from free text,<a href="#" ui-sref="freetext"> click here.</a></p>
+                    <br>
+                    <form class="navbar-form navbar-right" role="search">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                            <input type="text" class="form-control" data-ng-model="toAnnotate" data-ng-change="dataChanged()" placeholder= "Input text or NCBI id to annotate"></textarea>
+                        </div>
+                        <button data-ng-click="getPaper(toAnnotate)">Find Article</button>
+                     </form>
+                    <br>
+                    <br>
+                </div>
+                <ul>
         <li data-ng-repeat= "doc in document.payload |filter:toAnnotate |limitTo:4 " ng-if="toAnnotate.length > 0">
             <!-- Shows idNCBI and title of 4 documents-->
             <a data-ng-click="showAbstract(doc.title, doc.abstract, doc.idNCBI)  ">{{doc.idNCBI }} - {{doc.title}}</a>
-
-
         </li>
-
     </ul>
     </br>
 
@@ -26,37 +37,40 @@
 
         <!--Shows abstract and when it's annotated, shows annotations-->
         <!-- also shows popOver -->
-        <div id = "annotatedText" data-ng-click= getSelText()  ng-bind="abstract"
-             ns-popover
-             ns-popover-template="popover"
-             ns-popover-trigger="click"
-             ns-popover-placement = "top|left"
-             ns-popover-mouse-relative = "xy"
-             ns-popover-theme="ns-popover-list-theme">
-             Popover
+        <div id = "annotatedText" data-ng-click= getSelText()  ng-bind="abstract">
+             <!--ns-popover-->
+             <!--ns-popover-template="popover"-->
+             <!--ns-popover-trigger="click"-->
+             <!--ns-popover-placement = "top|left"-->
+             <!--ns-popover-mouse-relative = "xy"-->
+             <!--ns-popover-theme="ns-popover-list-theme">-->
+             <!--Popover-->
+
             </div>
         <!--Button to annotate this abstract-->
         <div ng-show = "showButton === true">
-            <button data-ng-click="showButton = false; annotateDoc(idNCBI)">Annotate Paper</button>
+            <!--<button ui-sref = "annotation " data-ng-click="showButton = false; annotateDoc(idNCBI)">Annotate Paper</button>-->
+            <button ui-sref = "annotation " >Annotate Paper</button>
         </div>
     </div>
 
 
-    <script type="text/ng-template" id = "popover">
-        <ul >
-            <!-- Shows operations for this annotation-->
-            <li ng-repeat="item in annotationsInClick">
-                <a href="#" ng-click = "showDetails = !showDetails; showChemicalDetails(item)">{{item.chem.name}}</a>
-                <div class = "operations" ng-show = "showDetails" ng-repeat = "op in item.content">{{op}}</div>
-            </li>
-        </ul>
-    </script>
+    <!--<script type="text/ng-template" id = "popover">-->
+        <!--<ul >-->
+            <!--&lt;!&ndash; Shows operations for this annotation&ndash;&gt;-->
+            <!--<li ng-repeat="item in annotationsInClick">-->
+                <!--<a href="#" ng-click = "showDetails = !showDetails; showChemicalDetails(item)">{{item.chem.name}}</a>-->
+                <!--<div class = "operations" ng-show = "showDetails" ng-repeat = "op in item.content">{{op}}</div>-->
+            <!--</li>-->
+        <!--</ul>-->
+    <!--</script>-->
 
 
-    <!-- Shows chemical details for popOver-->
-    <div ng-repeat = "(key, value) in chemDetails.chem">
-        <li>{{key}} : {{value}}</li>
-    </div>
+    <!--&lt;!&ndash; Shows chemical details for popOver&ndash;&gt;-->
+    <!--<div ng-repeat = "(key, value) in chemDetails.chem">-->
+        <!--<li>{{key}} : {{value}}</li>-->
+    <!--</div>-->
+
 
 
 </div>
