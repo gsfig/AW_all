@@ -133,18 +133,20 @@ class Chebi_controller extends REST_Controller {
       public function cheminfo_get(){
 
           $this->load->library('utilities');
+          $result = null;
         $term = $this->get('name');
         $url = $this->utilities->getUrlDbpedia($term);
         $this->load->model('Dbpedia_model');
         $result =  json_decode($this->Dbpedia_model->request($url));
-        $this->send_reply($result, "", "request failed");
-//        return $result;
+        $this->send_reply($result, "", "dbpedia request failed");
+        return $result;
     }
     /*
      * same as cheminfo_get but for controller usage
      */
     private function cheminfo($url){
         $this->load->model('Dbpedia_model');
+        $result = null;
         $result =  json_decode($this->Dbpedia_model->request($url));
         return $result;
     }

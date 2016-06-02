@@ -89,7 +89,7 @@ app.controller('DocumentJSController', ['apiBaseUrl',  'AbstractService', '$time
             }).then(function successCallback(response) {
                 AbstractService.setdocument_requested(response.data);
                 $scope.document_requested = AbstractService.getdocument_requested();
-                $scope.showAbstract($scope.document_requested.payload[0].title, $scope.document_requested.payload[0].abstract,$scope.document_requested.payload[i].idNCBI );
+                $scope.showAbstract($scope.document_requested.payload[0].title, $scope.document_requested.payload[0].abstract,$scope.document_requested.payload[0].idNCBI );
                 $timeout(function(){
                     $scope.$apply(function(){
                         getDocuments();
