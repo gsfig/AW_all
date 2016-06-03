@@ -51,6 +51,32 @@ class Login_model extends CI_Model
             return false;
         }
     }
+    public function getuserid($username){
+
+        $query = $this->db->get_where('users', array('username' => $username));
+        $result = $query->result();
+        $userid = null;
+
+        if(count($result) > 0){
+            $userid = $result[0]->idUser;
+        }
+        else{
+        }
+        return $userid;
+    }
+    public function getusername($id){
+        $this->db->select('username');
+        $query = $this->db->get_where('users', array('idUser' => $id));
+        $result = $query->result();
+        $username = null;
+
+        if(count($result) > 0){
+            $username = $result[0]->username;
+        }
+        else{
+        }
+        return $username;
+    }
 
 
 

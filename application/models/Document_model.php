@@ -35,6 +35,17 @@ class Document_model extends CI_Model
         return $query->result();
 
     }
+    public function listPaperAnnotationsByuser($userid){
+//        echo $userid;
+        $this->db->select('fkpaper, fkannotation');
+        $query = $this->db->get_where('paperannotation', array('fkuser' => $userid));
+
+        // TODO: esta sera forma de verificar resultado
+        if ($query->num_rows() < 1){
+            return null;
+        }
+        return $query->result();
+    }
 
     /*
      * in: paper id
@@ -43,7 +54,7 @@ class Document_model extends CI_Model
      */
     public function list_paper_annotation($idpaper)
     {
-        $this->db->select('fkannotation');
+        $this->db->select('fkuser,fkannotation');
         $query = $this->db->get_where('paperannotation', array('fkpaper' => $idpaper));
 
         // TODO: esta sera forma de verificar resultado
@@ -52,6 +63,18 @@ class Document_model extends CI_Model
         }
         return $query->result();
     }
+    public function getUserAnnotation($idPaperAnnotation){
+        $this->db->select('fkuser');
+        $query = $this->db->get_where('paperannotation', array('idpaperannotation' => $idPaperAnnotation));
+
+        if ($query->num_rows() < 1){
+            return null;
+        }
+        return $query->result();
+    }
+
+
+
     public function post_document($idNCBI,$title,$abstract){
 
         $data = array(
@@ -76,6 +99,54 @@ class Document_model extends CI_Model
         return $query->result();
 
     }
+
+    public function post_annotation($text, $offset, $size, $ssm_score, $fkChemCompound, $subtype, $chebi_score, $ssm_entity, $type){
+
+        $data = array(
+            // dava com ['text'] em vez de ->text
+            'text' => $text,
+            'ssm_score' => $ssm_score,
+            'fkchemicalcompound' => $fkChemCompound,
+            'subtype' => $subtype,
+            'chebi_score' => $chebi_score,
+            'ssm_entity' => $ssm_entity,
+            'type' => $type,
+            'offset' => $offset,
+            'size' =>$size
+        );
+//        echo $data;
+        // if data already exists in DB doesnt insert
+        $rowExists = $this->value_exists('annotation', $data);
+        
+//                if(!is_null($rowExists[0])){
+        if(count($rowExists) > 0){
+            $return = (int)$rowExists[0]->idannotation;
+        }
+        else{
+            $return = $this->insert($data,'annotation');
+        }
+
+        return $return;
+
+    }
+    public function post_User_paper_annotation($fkpaper, $fkuser, $fkannotation){
+        $paperannotation = array(
+            'fkpaper' => $fkpaper,
+            'fkuser' => $fkuser,
+            'fkannotation' => $fkannotation
+        );
+        $rowExists = $this->value_exists('paperannotation', $paperannotation);
+        if(count($rowExists) > 0){
+            $idpaperannotationInserted = (int)$rowExists[0]->idpaperannotation;
+        }
+        else{
+            $idpaperannotationInserted = $this->insert($paperannotation, 'paperannotation');
+        }
+        return $idpaperannotationInserted;
+
+    }
+
+
 
     public function post_paper_annotation($idNCBI, $annotation, $user){
 

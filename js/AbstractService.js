@@ -5,8 +5,36 @@ app.service('AbstractService', function(){
     this.getannotationsInClick = function(){
         return annotationsInClick;
     };
-    this.setannotationsInClick = function(a){
+    this.pushannotationsInClick = function(a){
         annotationsInClick.push(a);
+    };
+    this.setannotationsInClick = function(){
+        annotationsInClick = [];
+    };
+
+    // var operationsInClick = [];
+    // this.getoperationsInClick = function(){
+    //     return operationsInClick;
+    // };
+    // this.pushoperationsInClick = function(a){
+    //     operationsInClick.push(a);
+    // };
+    // this.setoperationsInClick = function(){
+    //     operationsInClick = [];
+    // };
+    
+    var click;
+    this.setClick = function(anchor1, anchor2, text){
+        click = {
+            anchor1 : anchor1,
+            anchor2 : anchor2,
+            text : text
+
+        };
+    };
+    this.getClick = function () {
+        return click;
+
     };
 
     var document;

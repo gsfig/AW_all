@@ -1,0 +1,130 @@
+<!--To annotate a new NCBI ID-->
+<!--or free text-->
+
+
+<form class="navbar-form navbar-right" role="search">
+    <h4>Do you want to add a new annotated compound?</h4>
+        <div class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-plus-sign"></i></span>
+            <input type="text" class="form-control" placeholder="Insert term here">
+        </div>
+    <button type="submit" ui-sref="??annotation" class="btn btn-default">Add</button>
+</form>
+<br>
+
+
+<!--Annotation-->
+<!--header-->
+
+
+<div class="page-header">
+  <h2>Annotation: <small>NCBI ID of the article or free text</small></h2>
+</div>
+
+
+
+
+
+<!--Annotated Text-->
+
+<br>
+<div class="row.pull-left">
+    <div class="col-sm-6 col-md-8">
+        <div class="thumbnail">
+            <h3 data-ng-bind = "title" >Annotated Text </h3>
+
+                <!--Shows abstract and when it's annotated, shows annotations-->
+                <!-- also shows popOver -->
+                <div id = "annotatedText" data-ng-click= getSelText()  ng-bind="abstract"
+                     ns-popover
+                     ns-popover-template="popover"
+                     ns-popover-trigger="click"
+                     ns-popover-placement = "top|left"
+                     ns-popover-mouse-relative = "xy"
+                     ns-popover-theme="ns-popover-list-theme">
+                    Popover
+                </div>
+
+
+            <script type="text/ng-template" id = "popover">
+                <ul ng-if = "annotation" >
+                    <!-- Shows operations for this annotation-->
+                    <li ng-repeat="item in annotationsInClick">
+                        <a ng-click = "showDetails = !showDetails; showChemicalDetails(item)">{{item.chem.annotated}}</a>
+                        <div class = "operations" ng-show = "showDetails" ng-repeat = "op in item.ops">{{op}}</div>
+
+                    </li>
+
+                </ul>
+                <ul ng-if = "span">
+                 <!--<a ng-if = "!annotation && span" ng-click = "showadd = !showadd; showClick()">add annotation</a>-->
+                    <!--<div ng-show = "showadd">-->
+                    <div  class = "addoptions"  >Add annotation: {{text}}</div>
+                    <form name="myForm" ng-controller="AbstractController">
+                        <label>chemical:
+                            <input type="checkbox" ng-model="typeChem.chemical">
+                        </label><br/>
+                        <label>other:
+                            <input type="checkbox" ng-model="typeChem.other">
+                        </label><br/>
+                        <button type="submit" ng-click=addAnnotation(typeChem.chemical,typeChem.other) class="btn btn-default">Add</button>
+                    </form>
+
+                </ul>
+
+            </script>
+
+            <!-- Shows chemical details for popOver-->
+            <!--<div ng-repeat = "(key, value) in chemDetails.chem">-->
+                <!--<li>{{key}} : {{value}}</li>-->
+            <!--</div>-->
+        </div>
+    </div>
+</div>
+
+<i class="glyphicon glyphicon-question-sign"></i>  To annotate a new term, select the text and then type of annotation
+<br>
+<br>
+<div class="row.pull-left">
+    <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+            <h3>Annotated Term ID</h3>
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Annotation</h3>
+                </div>
+                <table class="table table-striped">
+                    <tbody>
+                    <tr>
+                        <th>Annotated Term</th>
+                        <td>{{chemDetails.chem.annotated}} <br></td>
+                        <!--<span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span-->
+                    </tr>
+                    <tr>
+                        <th>IBEnt score</th>
+                        <td>{{chemDetails.chem.chebi_score}}</td>
+                    </tr>
+                    <tr>
+                        <th>Type</th>
+                        <td>{{chemDetails.chem.type}}</td>
+                    </tr>
+                    <tr>
+                        <th>ChEBI ID</th>
+                        <td>{{chemDetails.chem.ChebiID}}</td>
+                    </tr>
+                    <tr>
+                        <th>ChEBI name</th>
+                        <td>{{chemDetails.chem.name}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br>
+            <!--<i class="glyphicon glyphicon-trash"></i>  If you want to delete this annotation, <a If you want to delete this annotation, href="#" ui-sref="Delete">click here.</a>-->
+            <!--<br>-->
+            <i class="glyphicon glyphicon-question-sign"></i>  If you want to know this chemical compound, <a href="#" ui-sref="compound" ng-click="setChemToSearch(chemDetails.chem.ChebiID)">click here.</a>
+            <br>
+        </div>
+    </div>
+</div>
+

@@ -1,6 +1,6 @@
 // Make your directive
 angular.module('d3App.directives')
-    .directive('d3Bars', ['d3', function(d3) {
+    .directive('d3Bars', ['UserDataService','d3', function(UserDataService,d3) {
         return {
             restrict: 'EA',
             scope: {
@@ -9,6 +9,10 @@ angular.module('d3App.directives')
             },
             link: function(scope, iElement, iAttrs) {
 
+
+
+                var data = UserDataService.getdata();
+    
 
 
                 // create the svg to contain our visualization
@@ -26,9 +30,13 @@ angular.module('d3App.directives')
                     .attr("height", diameter)
                     .attr("class", "bubble");
 
-                d3.json("js/d3/flare.json", function(error, root) {
+                // d3.json('js/d3/flare2.json', function(error, root) {
+                // d3.json(d3Dataa, function(error, root) {
+                    // d3.json(angular.toJson(data).toString(), function(error, root) {
+                //     d3.json(jsonTEST, function(error, root) {
 
-                    if (error) throw error;
+                root = data;
+                    // if (error) throw error;
 
                     var node = svg.selectAll(".node")
                         .data(bubble.nodes(classes(root))
@@ -48,7 +56,6 @@ angular.module('d3App.directives')
                         .attr("dy", ".3em")
                         .style("text-anchor", "middle")
                         .text(function(d) { return d.className.substring(0, d.r / 3); });
-                });
 
                 // Returns a flattened hierarchy containing all leaf nodes under the root.
                 function classes(root) {

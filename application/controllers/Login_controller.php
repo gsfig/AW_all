@@ -11,6 +11,26 @@ class Login_controller extends REST_Controller{
         // Construct the parent class
         parent::__construct();
     }
+    private function send_reply($result, $messageOK, $messageFAIL)
+    {
+        // Check if data store contains documents(in case the database result returns NULL)
+        if ($result) {
+            // Set the response and exit
+            $this->response([
+                'payload' => $result,
+                'message' => "$messageOK"
+            ], REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+
+        } else {
+            // Set the response and exit
+            $this->response([
+                'status' => FALSE,
+                'message' => "$messageFAIL"
+            ], REST_Controller::HTTP_UNAUTHORIZED);
+        }
+    }
+
+
     function signup_post(){
 
         // TODO: verify if username is taken
@@ -38,6 +58,7 @@ class Login_controller extends REST_Controller{
         $password = sha1($data->password);
         $username = $data->username;
 
+
         $this->load->model('Login_model');
 
         $result = $this->Login_model->getUser($username,$password );
@@ -46,10 +67,10 @@ class Login_controller extends REST_Controller{
         if (count($result) == 1){
 
             $token = $this->updateToken($username);
+            $this->send_reply($token, 'logged in ', 'fail login');
 
-            echo $token;
         } else {
-            echo "ERROR";
+            $this->send_reply(null, 'logged in ', 'fail login');
         }
     }
     private function updateToken($username){
@@ -73,6 +94,78 @@ class Login_controller extends REST_Controller{
         } else {
             echo "db error log out";
         }
+    }
+
+    public function annotations_get(){
+        $this->load->model('Login_model');
+        $this->load->model('Document_model');
+
+        $username = $this->get('user');
+
+        if(is_numeric($username)){
+            $username = null;
+        }
+
+        $userid = $this->Login_model->getuserid($username);
+//        echo $userid;
+        $paperAnnotations = $this->Document_model->listPaperAnnotationsByuser($userid);
+//        print_r($paperAnnotations);
+        $allAnnotations = array();
+        $paperlist = array();
+
+//        var_dump($paperAnnotations);
+        if(!isset($paperAnnotations)){
+            $this->send_reply(null, "ok", "no annotations found");
+        }
+        else{
+            foreach ($paperAnnotations as $annot){ // lista total de papers
+
+                array_push($paperlist, $annot->fkpaper);
+
+//            print_r($annot);
+//            $a = $this->Document_model->getAnnotation($annot->fkannotation);
+//            print_r($a);
+
+//            $allAnnotations[$annot->fkpaper ] = $a[0];
+//            print_r($allAnnotations);
+//
+            }
+//        print_r($paperlist);
+
+            $uniquePapers = array_unique($paperlist);
+//        print_r($uniquePapers);
+            $annotations = array();
+            foreach($uniquePapers as $paperID){
+//            print_r($paperID);
+                $annotations['list'] =  $uniquePapers;
+                $annotations[$paperID] = array();
+                foreach($paperAnnotations as $annot){
+                    if($annot-> fkpaper == $paperID ){
+                        $a = $this->Document_model->getAnnotation($annot->fkannotation);
+                        array_push($annotations[$paperID], get_object_vars($a[0]));
+                    }
+                }
+
+            }
+//        print_r($annotations);
+
+//        foreach ($annotations as $paper){
+//
+//        }
+
+//die();
+
+            if(empty($annotations)){
+                $annotations = null;
+            }
+            $this->send_reply(json_encode($annotations, true), "ok", "no annotations found");
+
+        }
+
+
+
+
+
     }
 
 

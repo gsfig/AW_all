@@ -1,5 +1,5 @@
 'use strict';
-app.controller('AbstractController', ['AbstractService','ChemicalService', 'apiBaseUrl', '$http','$timeout', '$scope', '$state', 'nsPopover', function(AbstractService,ChemicalService, apiBaseUrl,$http,$timeout, $scope ){
+app.controller('AbstractController', ['AbstractService','ChemicalService', 'AuthenticationService', 'apiBaseUrl', '$http','$timeout', '$scope', '$state', 'nsPopover', function(AbstractService,ChemicalService, AuthenticationService, apiBaseUrl,$http,$timeout, $scope ){
 
     var sel = undefined;
     var range = undefined;
@@ -97,6 +97,9 @@ app.controller('AbstractController', ['AbstractService','ChemicalService', 'apiB
     $scope.showAnnotations = function(){
         var list = document.getElementById("annotatedText");
 
+        var user = AuthenticationService.user();
+        // console.log($scope.ibent_annotation);
+
         // console.log(list.childElementCount);
         // rangy.init();
         // var txt = document.getElementById("annotatedText2").textContent;
@@ -115,6 +118,8 @@ app.controller('AbstractController', ['AbstractService','ChemicalService', 'apiB
             var start = parseInt(annot.offset);
             var end = start + parseInt(annot.size);
 
+            // console.log('userlogged: ' + user + ' user annotation: ' +annot.user)
+
             // highlighter.highlightCharacterRanges('annotatedText', [start, end])
 
 
@@ -125,13 +130,21 @@ app.controller('AbstractController', ['AbstractService','ChemicalService', 'apiB
             // see if its easy to remove range and re-highlight ranges
 
             // console.log("start: "+start + " end: " + end + " text: " + annot.text);
-            selectAndHighlightRange('annotatedText', start, end);
+
+            if(user === 1 || user == annot.user ||  annot.user === null ){
+                // console.log("highlight");
+                selectAndHighlightRange('annotatedText', start, end);
+            }
+
 
 
             // rangy.createHighlighter(document.getElementById("annotatedText"),)
         });
 
-        sel.removeAllRanges();
+        if(angular.isDefined(sel)){
+            sel.removeAllRanges();
+        }
+
         // range.detach();
         // range.deleteContents();
         // console.log(textRange);
@@ -142,16 +155,44 @@ app.controller('AbstractController', ['AbstractService','ChemicalService', 'apiB
 
 
         var click = AbstractService.getClick();
-        console.log("addAnnotation: " + click.text);
+        // console.log("addAnnotation: " + click.text);
 
 
     };
     $scope.addAnnotation = function(chem, oth){
         var click = AbstractService.getClick();
-        console.log("addAnnotation: " + click.text);
-        console.log("typeChem: " + chem);
+        var type;
+        // console.log("addAnnotation: " + click.text);
+        // console.log("typeChem: " + chem);
 
-        
+        if(chem){
+            type = 'chemical'
+        }
+        else if(oth){
+            type = 'other'
+        }
+        else{
+            type = null
+        }
+        $http({
+            method: "post",
+            url: apiBaseUrl + "/document/annotation",
+            data: {
+                document : AbstractService.getidNCBI(),
+                text: click.text,
+                begin : click.anchor1,
+                end : click.anchor2,
+                type : type,
+                username : AuthenticationService.user()
+            },
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
+        }).then(function successCallback(response) {
+            // console.log(response );
+        }, function errorCallback(response) {
+            console.error(response.data.message);
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+        });
 
 
     };
@@ -266,6 +307,12 @@ app.controller('AbstractController', ['AbstractService','ChemicalService', 'apiB
 
         ChemicalService.setchemDetails(annotationInClick);
         $scope.chemDetails = ChemicalService.getchemDetails();
+    };
+
+    $scope.setChemToSearch = function(chemID){
+        ChemicalService.setchemToSearch(chemID);
+        $scope.chemToSearch = ChemicalService.getchemToSearch();
+
     };
 
 

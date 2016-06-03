@@ -41,13 +41,12 @@ app.controller('LoginController',['$scope','$http','$uibModalInstance', 'apiBase
         }).then(function successCallback(response) {
             // console.log(response);
             // TODO: response vem em json do servidor com mais info do que necessario, verificar se response.data enviado ao servidor para autenticacao é o que servidor esta a espera na BD, coluna "Token"
-            AuthenticationService.add( JSON.stringify(response.data),$scope.loginInfo.username );
+            AuthenticationService.add( JSON.stringify(response.data.payload),$scope.loginInfo.username );
             $uibModalInstance.close();
             // $uibModalInstance.close();
         }, function errorCallback(response) {
-            // called asynchronously if an error occurs
-            // or server returns response with an error status.
-            console.error(error);
+            alert('user not recognized');
+            console.error(response.data.message);
         });
 
     }
