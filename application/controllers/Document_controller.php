@@ -131,10 +131,16 @@ class Document_controller extends REST_Controller
     }
     public function free_text_post()
     {
+
+
         $data = json_decode(file_get_contents("php://input"));
+
         $text_to_anotate = $data->text;
 
+
+
 //		$text_to_anotate = $this->pull_data();
+//        echo $text_to_anotate;/
 //		$text_to_anotate = "Primary Leydig cells obtained from bank vole testes and the established tumor Leydig cell line (MA-10) have been used to explore the effects of 4-tert-octylphenol (OP). Leydig cells were treated with two concentrations of OP (10(-4)M, 10(-8)M) alone or concomitantly with anti-estrogen ICI 182,780 (1M). In OP-treated bank vole Leydig cells, inhomogeneous staining of estrogen receptor (ER) within cell nuclei was found, whereas it was of various intensity among MA-10 Leydig cells. The expression of ER mRNA and protein decreased in both primary and immortalized Leydig cells independently of OP dose. ICI partially reversed these effects at mRNA level while at protein level abrogation was found only in vole cells. Dissimilar action of OP on cAMP and androgen production was also observed. This study provides further evidence that OP shows estrogenic properties acting on Leydig cells. However, its effect is diverse depending on the cellular origin. ";
 
 
@@ -233,6 +239,8 @@ class Document_controller extends REST_Controller
         $type = $data->type;
         $user = $data->username;
 
+
+
         $userid = $this->Login_model->getuserid($user);
 
 
@@ -252,7 +260,7 @@ class Document_controller extends REST_Controller
 //        die();
 
 
-        $idAnnotation = $this->Document_model->post_annotation($text, $begin, strval($size), '0', '152', null, '0', '0', $type);
+        $idAnnotation = $this->Document_model->post_annotation($text, $begin, strval($size), '0', '1', null, '0', '0', $type);
 
 //        echo $user;
 //        print_r($idPaper);

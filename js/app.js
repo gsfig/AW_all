@@ -62,6 +62,24 @@ app.config( function($stateProvider, $urlRouterProvider) {
 
             }
         })
+        .state('admin', {
+            url: '/admin',
+            views: {
+                '' : {templateUrl: 'partials/admin.html'},
+                'header@admin' : {templateUrl: 'partials/headerSec.html', controller: 'NavBarController'},
+                'page@admin' : {templateUrl: "partials/adminPage.html", controller: 'UserController'},
+
+
+            }
+        })
+        .state('freetext', {
+            url: '/freetext',
+            views: {
+                '' : {templateUrl: 'partials/freeText.html'},
+                'header@freetext' : {templateUrl: 'partials/headerSec.html', controller: 'NavBarController'},
+                'text@freetext' : {templateUrl: 'partials/freeTextToAnnotate.html', controller: 'DocumentJSController'},
+            }
+        })
 
 
 

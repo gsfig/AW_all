@@ -20,8 +20,8 @@ class Ibent_model extends CI_Model {
 		curl_setopt($curl, CURLOPT_URL, "http://10.10.4.63:8080/iice/chemical/entities");
 		curl_setopt($curl, CURLOPT_POST, TRUE);
 		curl_setopt($curl, CURLOPT_POSTFIELDS, $payload);
-//		curl_setopt($curl, CURLOPT_TIMEOUT, 90);
-//		curl_setopt($curl,  CURLOPT_CONNECTTIMEOUT, 87);
+		curl_setopt($curl, CURLOPT_TIMEOUT, 90);
+		curl_setopt($curl,  CURLOPT_CONNECTTIMEOUT, 87);
 		curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
 		# Send request.
 		$result = curl_exec($curl);

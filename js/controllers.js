@@ -50,6 +50,7 @@ app.controller('DocumentJSController', ['apiBaseUrl',  'AbstractService', '$time
 
 
 
+
     };
     // sets abstract and title to null so that it doesn't show in view if text in searchbox changes
     $scope.dataChanged = function() {
@@ -102,6 +103,15 @@ app.controller('DocumentJSController', ['apiBaseUrl',  'AbstractService', '$time
             });
         }
     };
+    
+    $scope.freeTextAnnotate = function(toAnnotate){
+        $scope.showAbstract("Free Text", toAnnotate, null)
+        AbstractService.setinView(toAnnotate)
+
+    };
+    
+    
+    
 //     $scope.annotateDoc = function(idOrText){
 //         // $scope.showButton = false;
 //         isNaN(parseInt(idOrText)) ? annotateText(idOrText) : annotatePaper(idOrText);

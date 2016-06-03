@@ -1,13 +1,13 @@
 <!--To search a new compound-->
 
-<!--<form class="navbar-form navbar-right" role="search">-->
-    <!--<div class="input-group">-->
-        <!--<span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>-->
-        <!--<input type="text" class="form-control" placeholder="Insert ChEBI ID here">-->
-    <!--</div>-->
-    <!--<button type="submit" ui-sref="compound" class="btn btn-default">Search</button>-->
-<!--</form>-->
-<!--<br>-->
+<form class="navbar-form navbar-right" role="search">
+    <div class="input-group">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+        <input type="text" class="form-control" data-ng-model="chebiID" placeholder="Insert ChEBI ID here">
+    </div>
+    <button data-ng-click="getChebi(chebiID)" class="btn btn-default">Search</button>
+</form>
+<br>
 
 
 <!-- Compound-->
@@ -22,12 +22,12 @@
 <!--TODO: alterar nome de variaveis que espera, testar arrays -->
 <!--para retirar depois-->
 
-<div>
-    <form >
-        <textarea name="id" data-ng-model="chebiID"placeholder="Chebi ID"></textarea>
-        <button data-ng-click="getChebi(chebiID)">submit compound</button>
-    </form>
-</div>
+<!--<div>-->
+    <!--<form >-->
+        <!--<textarea name="id" data-ng-model="chebiID"placeholder="Chebi ID"></textarea>-->
+        <!--<button data-ng-click="getChebi(chebiID)">submit compound</button>-->
+    <!--</form>-->
+<!--</div>-->
 
 
 <!-- Separador Main-->
@@ -166,30 +166,30 @@
 
 <!-- Separador Ontology-->
 
-<div class="panel panel-success">
-    <div class="panel-heading">
-        <label class="panel-title">Ontology</label>
-    </div>
-    <div class="panel-body">
-        Panel content
-        ????
-    </div>
-</div>
+<!--<div class="panel panel-success">-->
+    <!--<div class="panel-heading">-->
+        <!--<label class="panel-title">Ontology</label>-->
+    <!--</div>-->
+    <!--<div class="panel-body">-->
+        <!--Panel content-->
+        <!--????-->
+    <!--</div>-->
+<!--</div>-->
 
 
 
 
-<!-- Separador Pathway-->
+<!--&lt;!&ndash; Separador Pathway&ndash;&gt;-->
 
 
-<div class="panel panel-success">
-    <div class="panel-heading">
-        <label class="panel-title">Pathways</label>
-    </div>
-    <div class="panel-body">
-        Panel content
-        ???
-    </div>
-</div>
+<!--<div class="panel panel-success">-->
+    <!--<div class="panel-heading">-->
+        <!--<label class="panel-title">Pathways</label>-->
+    <!--</div>-->
+    <!--<div class="panel-body">-->
+        <!--Panel content-->
+        <!--???-->
+    <!--</div>-->
+<!--</div>-->
 
 

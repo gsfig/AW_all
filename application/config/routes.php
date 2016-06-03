@@ -65,6 +65,9 @@ $route['document'] = 'document_controller/document';
 //$route['document/(:num)'] = 'document_controller/document/id/$1';
 $route['document/annotation'] = 'document_controller/paper_annotation';
 
+$route['admin/delete'] = 'login_controller/delete';
+
+
 
 
 $route['ibent_annotate'] = 'document_controller/free_text';

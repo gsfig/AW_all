@@ -16,7 +16,19 @@ app.controller('AbstractController', ['AbstractService','ChemicalService', 'Auth
 
     // console.log($scope.title);
 
-    annotateDoc($scope.inView);
+    if($scope.inView === null){
+        $timeout(function () {
+            $scope.$apply(function () {
+                $scope.inView = AbstractService.getinView();
+                annotateDoc($scope.inView);
+            })
+        });
+    }
+    else{
+        annotateDoc($scope.inView);
+    }
+
+
 
 
 
@@ -24,10 +36,13 @@ app.controller('AbstractController', ['AbstractService','ChemicalService', 'Auth
 
 
     function annotateDoc(idOrText){
-
-    // $scope.annotateDoc = function(idOrText){
+        // $scope.annotateDoc = function(idOrText){
         // $scope.showButton = false;
         isNaN(parseInt(idOrText)) ? annotateText(idOrText) : annotatePaper(idOrText);
+
+
+
+
     };
 
     function annotatePaper(id) {
@@ -78,11 +93,10 @@ app.controller('AbstractController', ['AbstractService','ChemicalService', 'Auth
             $scope.ibent_annotation = AbstractService.getibent_annotation();
 
             // console.log($scope.ibent_annotation);
-            $scope.dataChanged();
-            $scope.showAbstract("Free text annotation", text, undefined);
+            // $scope.dataChanged();
+            // $scope.showAbstract("Free text annotation", text, undefined);
             $timeout(function(){
                 $scope.$apply(function(){
-
                     $scope.showAnnotations()
                 })
             });
@@ -97,22 +111,10 @@ app.controller('AbstractController', ['AbstractService','ChemicalService', 'Auth
     $scope.showAnnotations = function(){
         var list = document.getElementById("annotatedText");
 
+        console.log("showAnnotations")
+
         var user = AuthenticationService.user();
-        // console.log($scope.ibent_annotation);
 
-        // console.log(list.childElementCount);
-        // rangy.init();
-        // var txt = document.getElementById("annotatedText2").textContent;
-        // console.log(txt);
-
-        // element.charAt(3).style.backgroundColor = "yellow";
-        // console.log(txt.substr(8,7));
-        // txt.replace(txt.substr(8,7), '<span id="highlight">'+txt.substr(8,7)+'</span>');
-
-        // var classApplier = rangy.createClassApplier('annotatedText');
-        // var highlighter = rangy.createHighlighter(element, 'TextRange');
-        //
-        // highlighter.addClassApplier(classApplier);
 
         angular.forEach($scope.ibent_annotation, function(annot){
             var start = parseInt(annot.offset);
@@ -123,11 +125,6 @@ app.controller('AbstractController', ['AbstractService','ChemicalService', 'Auth
             // highlighter.highlightCharacterRanges('annotatedText', [start, end])
 
 
-            // built range
-
-            // highlight range
-
-            // see if its easy to remove range and re-highlight ranges
 
             // console.log("start: "+start + " end: " + end + " text: " + annot.text);
 
@@ -155,14 +152,13 @@ app.controller('AbstractController', ['AbstractService','ChemicalService', 'Auth
 
 
         var click = AbstractService.getClick();
-        // console.log("addAnnotation: " + click.text);
 
 
     };
     $scope.addAnnotation = function(chem, oth){
         var click = AbstractService.getClick();
         var type;
-        // console.log("addAnnotation: " + click.text);
+        // console.log("addAnnotation: " + click.text + ' ' + click.anchor1 + ' ' + click.anchor2);
         // console.log("typeChem: " + chem);
 
         if(chem){
@@ -187,7 +183,8 @@ app.controller('AbstractController', ['AbstractService','ChemicalService', 'Auth
             },
             headers: { 'Content-Type': 'application/x-www-form-urlencoded'}
         }).then(function successCallback(response) {
-            // console.log(response );
+            annotateDoc($scope.inView)
+
         }, function errorCallback(response) {
             console.error(response.data.message);
             // called asynchronously if an error occurs

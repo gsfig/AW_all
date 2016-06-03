@@ -167,6 +167,27 @@ class Login_controller extends REST_Controller{
 
 
     }
+    
+    public function delete_post(){
+        $this->load->model('Db_model');
+
+        $data = json_decode(file_get_contents("php://input"));
+        $username = $data->username;
+
+        echo $username;
+
+        $this->Db_model->deleteDB();
+
+
+
+
+
+//        $this->send_reply(null, "", "error deleting database");
+
+        
+    }
+    
+    
 
 
 
