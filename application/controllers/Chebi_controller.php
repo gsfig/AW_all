@@ -53,7 +53,6 @@ class Chebi_controller extends REST_Controller {
         $this->load->library('utilities');
 
 		$chebi_id = $this->get('id');
-//        echo "chbi id in compounds_get: "; print_r($chebi_id); echo "\n";
         
         if(!is_numeric($chebi_id)){
 //            $chem_name = $chebi_id;
@@ -82,7 +81,8 @@ class Chebi_controller extends REST_Controller {
             //get from DB
             $ChemProperties = $this->Chemical_model->getChemical($chebi_id);
 //            echo "controller compounds_get, Chem from DB: "; print_r($ChemProperties); echo "\n";
-//            $chemName = $ChemProperties[0]->chebiname;
+            $chemName = $ChemProperties[0]->chebiname;
+//            print_r($ChemProperties);
             $chemName = $ChemProperties->chebiname;
 
             $chemName = ucwords($chemName);

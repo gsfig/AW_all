@@ -1,5 +1,7 @@
 <!--To search a new compound-->
 
+<div itemscope="itemscope" itemtype="http://www.axeleratio.com/voc/chemid">
+
 <form class="navbar-form navbar-right" role="search">
     <div class="input-group">
         <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
@@ -15,7 +17,7 @@
 
 
 <div class="page-header">
-    <h2>Chemical Compound: <small>CHEBI ID {{chebi.chebiid}}</small></h2>
+    <h2>Chemical Compound: <small itemprop="ChEBI">CHEBI ID {{chebi.chebiid}}</small></h2>
 </div>
 
 
@@ -50,15 +52,15 @@
             <tbody>
             <tr>
                 <th>ChEBI ID</th>
-                <td>{{chebi.chebiid}}</td>
+                <td itemprop="ChEBI">{{chebi.chebiid}}</td>
             </tr>
             <tr>
                 <th>ChEBI Name</th>
-                <td>{{chebi.chebiname}}</td>
+                <td itemprop="CompName">{{chebi.chebiname}}</td>
             </tr>
             <tr>
                 <th>Formula</th>
-                <td>{{chebi.formula_data}}</td>
+                <td itemprop="Formula">{{chebi.formula_data}}</td>
             </tr>
             </tbody>
         </table>
@@ -79,15 +81,15 @@
             </tr>
             <tr>
                 <th>Inchy</th>
-                <td>{{chebi.inchi}}</td>
+                <td itemprop="InChI">{{chebi.inchi}}</td>
             </tr>
             <tr>
                 <th>Inchi Key</th>
-                <td>{{chebi.inchikey}}</td>
+                <td itemprop="InChI">{{chebi.inchikey}}</td>
             </tr>
             <tr>
                 <th>SMILES</th>
-                <td>{{chebi.smiles }}</td>
+                <td itemprop= "SMILES">{{chebi.smiles }}</td>
             </tr>
             <tr>
                 <th>Synonym</th>
@@ -154,7 +156,7 @@
             </tr>
             <tr>
                 <th>PubChem Reference</th>
-                <td>{{chebi.pubchem }}</td>
+                <td itemprop= "PubChem">{{chebi.pubchem }}</td>
             </tr>
             </tbody>
         </table>

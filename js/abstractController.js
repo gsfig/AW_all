@@ -27,21 +27,10 @@ app.controller('AbstractController', ['AbstractService','ChemicalService', 'Auth
     else{
         annotateDoc($scope.inView);
     }
-
-
-
-
-
-
-
-
     function annotateDoc(idOrText){
         // $scope.annotateDoc = function(idOrText){
         // $scope.showButton = false;
         isNaN(parseInt(idOrText)) ? annotateText(idOrText) : annotatePaper(idOrText);
-
-
-
 
     };
 
@@ -111,9 +100,10 @@ app.controller('AbstractController', ['AbstractService','ChemicalService', 'Auth
     $scope.showAnnotations = function(){
         var list = document.getElementById("annotatedText");
 
-        console.log("showAnnotations")
+        // console.log("showAnnotations")
 
         var user = AuthenticationService.user();
+        console.log($scope.ibent_annotation);
 
 
         angular.forEach($scope.ibent_annotation, function(annot){

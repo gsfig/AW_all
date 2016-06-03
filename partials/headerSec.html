@@ -11,7 +11,7 @@
 				<br> 
 				<br>
             <ul class="nav navbar-nav navbar-right">
-                <li><a ui-sref = "user " ng-show= useractive()>{{username}}</a></li>
+                <li><a ui-sref = "user " ng-show= useractive() property="foaf:name">{{username}}</a></li>
                 <li><a ng-show= !useractive() ng-click= open()>Login / Sign Up</a></li>
                 <li><a ng-show=useractive() ng-click = logout()>Logout</a></li>
             </ul>

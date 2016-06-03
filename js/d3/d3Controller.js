@@ -11,14 +11,14 @@ angular.module('d3App.controllers')
                 username = 0
             }
             // var urlcomplete = apiBaseUrl + '/user/' + '?username=' + username + '/annotations';
-            var urlcomplete = apiBaseUrl + '/user/'  + 'annotations/'+ '?user=' + username;
+            var urlcomplete = apiBaseUrl + '/document/annotation/user/'  + '?user=' + username;
             $http({
                 url: urlcomplete,
                 method: "GET"
             }).then(function successCallback(response) {
                 // $timeout(function(){
                 //     $scope.$apply(function(){
-                console.log(response.data.payload);
+                // console.log(response.data.payload);
                         setData(response.data.payload);
                     // })
                 // });

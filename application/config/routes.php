@@ -57,13 +57,14 @@ $route['user/login'] = 'login_controller/login';
 $route['user/logout'] = 'login_controller/logout';
 //$route['user/annotations'] = 'login_controller/annotations/username';
 //$route['user/(:any)/annotations'] = 'login_controller/annotations/username/$1';
-$route['user/annotations'] = 'login_controller/annotations/user/$1';
 
+$route['document'] = 'document_controller/document';
 
 $route['document/(:num)/annotation'] = 'document_controller/paperAnnotation/idNCBI/$1';
-$route['document'] = 'document_controller/document';
+
 //$route['document/(:num)'] = 'document_controller/document/id/$1';
 $route['document/annotation'] = 'document_controller/paper_annotation';
+$route['document/annotation/user'] = 'login_controller/annotations/user/$1';
 
 $route['admin/delete'] = 'login_controller/delete';
 
